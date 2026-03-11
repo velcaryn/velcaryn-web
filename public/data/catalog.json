@@ -23,19 +23,19 @@
   ],
   "products": [
     {
-      "id": "foley-catheter",
-      "name": "Foley Catheter",
-      "category": "disposables",
-      "description": "High-quality latex Foley catheter designed for reliable urinary drainage in clinical and surgical settings.",
-      "image": "assets/foley_catheter_1772694231255.png",
-      "isQuoteOnly": true
-    },
-    {
       "id": "CH0045",
       "name": "Ambu Bag",
       "category": "respiratory",
       "description": "Manual resuscitator available in Infant, Child, and Adult sizes. Suitable for emergency ventilation support.",
       "image": "assets/ambu_bag_1772694616129.png",
+      "isQuoteOnly": true
+    },
+    {
+      "id": "foley-catheter",
+      "name": "Foley Catheter",
+      "category": "disposables",
+      "description": "High-quality latex Foley catheter designed for reliable urinary drainage in clinical and surgical settings.",
+      "image": "assets/foley_catheter_1772694231255.png",
       "isQuoteOnly": true
     },
     {
