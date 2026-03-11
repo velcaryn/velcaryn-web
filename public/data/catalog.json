@@ -23,14 +23,6 @@
   ],
   "products": [
     {
-      "id": "test-flow",
-      "name": "Test Flow",
-      "category": "surgical_dressings",
-      "description": "Test Description Test Description Test Description Test Description Test Description Test Description ",
-      "image": "images/products/test-flow.png",
-      "isQuoteOnly": true
-    },
-    {
       "id": "foley-catheter",
       "name": "Foley Catheter",
       "category": "disposables",

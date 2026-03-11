@@ -1,6 +1,15 @@
 {
   "archived_products": [
     {
+      "id": "test-flow",
+      "name": "Test Flow",
+      "category": "surgical_dressings",
+      "description": "Test Description Test Description Test Description Test Description Test Description Test Description ",
+      "image": "images/products/test-flow.png",
+      "isQuoteOnly": true,
+      "archivedAt": "2026-03-11T16:09:20.176Z"
+    },
+    {
       "id": "test",
       "name": "Test",
       "category": "surgical_dressings",
