@@ -23,14 +23,6 @@
   ],
   "products": [
     {
-      "id": "test",
-      "name": "Test",
-      "category": "surgical_dressings",
-      "description": "Test",
-      "image": "images/products/test.png",
-      "isQuoteOnly": true
-    },
-    {
       "id": "foley-catheter",
       "name": "Foley Catheter",
       "category": "disposables",

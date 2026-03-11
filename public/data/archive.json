@@ -1,6 +1,15 @@
 {
   "archived_products": [
     {
+      "id": "test",
+      "name": "Test",
+      "category": "surgical_dressings",
+      "description": "Test",
+      "image": "images/products/test.png",
+      "isQuoteOnly": true,
+      "archivedAt": "2026-03-11T11:12:24.955Z"
+    },
+    {
       "id": "test-tube-12tr86218gif",
       "name": "Test Tube 12tr86218gif ",
       "category": "surgical_dressings",
