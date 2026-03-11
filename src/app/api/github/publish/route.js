@@ -4,10 +4,23 @@ import { authOptions } from "../../auth/[...nextauth]/route";
 import fs from 'fs';
 import path from 'path';
 
+const IS_PROD = process.env.NODE_ENV === 'production';
+
+// Helper: fetch a file from GitHub and return parsed JSON + its blob SHA
+async function getJsonFromGitHub(octokit, owner, repo, filePath) {
+    try {
+        const res = await octokit.rest.repos.getContent({ owner, repo, path: filePath });
+        const content = Buffer.from(res.data.content, 'base64').toString('utf8');
+        return { data: JSON.parse(content), sha: res.data.sha };
+    } catch (e) {
+        if (e.status === 404) return { data: null, sha: null };
+        throw e;
+    }
+}
+
 export async function POST(req) {
     const session = await getServerSession(authOptions);
     
-    // Strict generic validation - prevent any unauthenticated modifications
     if (!session || session.user?.email !== "admin@velcaryn.com") {
         return new Response(JSON.stringify({ error: "Unauthorized Gateway Access" }), { status: 401, headers: { 'Content-Type': 'application/json' } });
     }
@@ -16,28 +29,50 @@ export async function POST(req) {
         const body = await req.json();
         const { action, payload, commitMessage } = body;
 
-        // 1. Read latest local state to prevent overriding race-conditions from stale clients
-        const catalogPath = path.join(process.cwd(), 'public', 'data', 'catalog.json');
-        let catalogData = JSON.parse(fs.readFileSync(catalogPath, 'utf8'));
-        
-        const archivePath = path.join(process.cwd(), 'public', 'data', 'archive.json');
-        let archiveData = fs.existsSync(archivePath) ? JSON.parse(fs.readFileSync(archivePath, 'utf8')) : { archived_products: [] };
-        
-        let imagesToPush = [];
-        let modifiedFiles = ['catalog.json']; // Track which logical domains to commit
+        // --- 1. Read latest state ---
+        // In production: read from GitHub to always get current truth.
+        // In development: read from local disk for instant staging feedback.
+        let catalogData, archiveData;
 
-        // Apply state mutation based on action payload
+        if (!process.env.GITHUB_API_TOKEN) {
+            return new Response(JSON.stringify({ error: "GITHUB_API_TOKEN is not configured on this server." }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+        }
+
+        const octokit = new Octokit({ auth: process.env.GITHUB_API_TOKEN });
+        const owner = 'velcaryn';
+        const repo = 'velcaryn-web';
+        const branch = 'main';
+
+        if (IS_PROD) {
+            // Always read from GitHub in production
+            const catalogResult = await getJsonFromGitHub(octokit, owner, repo, 'public/data/catalog.json');
+            catalogData = catalogResult.data || { products: [], categories: [] };
+
+            const archiveResult = await getJsonFromGitHub(octokit, owner, repo, 'public/data/archive.json');
+            archiveData = archiveResult.data || { archived_products: [] };
+        } else {
+            // Read from local disk in development
+            const catalogPath = path.join(process.cwd(), 'public', 'data', 'catalog.json');
+            catalogData = JSON.parse(fs.readFileSync(catalogPath, 'utf8'));
+            
+            const archivePath = path.join(process.cwd(), 'public', 'data', 'archive.json');
+            archiveData = fs.existsSync(archivePath) ? JSON.parse(fs.readFileSync(archivePath, 'utf8')) : { archived_products: [] };
+        }
+
+        let imagesToPush = [];
+        let modifiedFiles = ['catalog.json'];
+
+        // --- 2. Apply state mutation ---
         if (action === 'UPDATE_PRODUCT') {
             const { product, imageContentBase64 } = payload;
             const existingIndex = catalogData.products.findIndex(p => p.id === product.id);
             
             if (existingIndex >= 0) {
-                catalogData.products[existingIndex] = product; // Update existing
+                catalogData.products[existingIndex] = product;
             } else {
-                catalogData.products.unshift(product); // Add new to top of catalog
+                catalogData.products.unshift(product);
             }
 
-            // Immediately purge from archive if it was restored from there by a direct edit
             const archiveIndex = archiveData.archived_products.findIndex(p => p.id === product.id);
             if (archiveIndex >= 0) {
                 archiveData.archived_products.splice(archiveIndex, 1);
@@ -45,10 +80,7 @@ export async function POST(req) {
             }
 
             if (imageContentBase64) {
-                imagesToPush.push({
-                    path: `public/${product.image}`,
-                    contentBase64: imageContentBase64
-                });
+                imagesToPush.push({ path: `public/${product.image}`, contentBase64: imageContentBase64 });
             }
         } else if (action === 'REORDER_CATALOG') {
             catalogData.products = payload.products;
@@ -77,7 +109,7 @@ export async function POST(req) {
         } else if (action === 'REMOVE_FROM_LIVE') {
             const index = catalogData.products.findIndex(p => p.id === payload.productId);
             if (index >= 0) {
-                catalogData.products.splice(index, 1); // Only delete from live array, don't archive
+                catalogData.products.splice(index, 1);
             } else {
                 return new Response(JSON.stringify({ error: "Product ID not found in live catalog" }), { status: 404 });
             }
@@ -93,118 +125,57 @@ export async function POST(req) {
             return new Response(JSON.stringify({ error: "Invalid Action Descriptor" }), { status: 400 });
         }
 
-        // 2. Immediately apply updates to local Next.js disk so localhost reflects changes instantly
-        fs.writeFileSync(catalogPath, JSON.stringify(catalogData, null, 2), 'utf8');
-        if (modifiedFiles.includes('archive.json')) {
-            fs.writeFileSync(archivePath, JSON.stringify(archiveData, null, 2), 'utf8');
-        }
-
-        for (const img of imagesToPush) {
-            // Strip the base64 data URI header prefix before writing to binary filesystem
-            const base64Data = img.contentBase64.replace(/^data:image\/\w+;base64,/, "");
-            const imagePath = path.join(process.cwd(), img.path);
-            
-            // Ensure the nested directory structures (like /public/images/products) actually exist on disk first
-            const imageDir = path.dirname(imagePath);
-            if (!fs.existsSync(imageDir)) {
-                fs.mkdirSync(imageDir, { recursive: true });
+        // --- 3. Write to local disk ONLY in development (Netlify is read-only) ---
+        if (!IS_PROD) {
+            const catalogPath = path.join(process.cwd(), 'public', 'data', 'catalog.json');
+            const archivePath = path.join(process.cwd(), 'public', 'data', 'archive.json');
+            fs.writeFileSync(catalogPath, JSON.stringify(catalogData, null, 2), 'utf8');
+            if (modifiedFiles.includes('archive.json')) {
+                fs.writeFileSync(archivePath, JSON.stringify(archiveData, null, 2), 'utf8');
             }
-            
-            fs.writeFileSync(imagePath, base64Data, 'base64');
+            for (const img of imagesToPush) {
+                const base64Data = img.contentBase64.replace(/^data:image\/\w+;base64,/, "");
+                const imagePath = path.join(process.cwd(), img.path);
+                const imageDir = path.dirname(imagePath);
+                if (!fs.existsSync(imageDir)) fs.mkdirSync(imageDir, { recursive: true });
+                fs.writeFileSync(imagePath, base64Data, 'base64');
+            }
         }
 
-        // 2. Fallback check for GitHub Token
-        if (!process.env.GITHUB_API_TOKEN) {
-            return new Response(JSON.stringify({ 
-                success: true, 
-                warning: "Changes saved locally to staging, but GITHUB_API_TOKEN is missing. Remote push skipped." 
-            }), { status: 200, headers: { 'Content-Type': 'application/json' } });
-        }
-
-        // 3. Authenticate generic REST GitHub Client
-        const octokit = new Octokit({ auth: process.env.GITHUB_API_TOKEN });
-        const owner = 'velcaryn';
-        const repo = 'velcaryn-web';
-        const branch = 'main';
-
-        // A. Extract current commit SHA tree cursor
+        // --- 4. Commit to GitHub ---
         const refRes = await octokit.rest.git.getRef({ owner, repo, ref: `heads/${branch}` });
         const commitSha = refRes.data.object.sha;
         const commitRes = await octokit.rest.git.getCommit({ owner, repo, commit_sha: commitSha });
         const rootTreeSha = commitRes.data.tree.sha;
 
-        // B. Generate Blobs for data modifications
         const treeItems = [];
 
         if (modifiedFiles.includes('catalog.json')) {
-            const catalogBlobRes = await octokit.rest.git.createBlob({
-                owner, repo,
-                content: JSON.stringify(catalogData, null, 2),
-                encoding: 'utf-8'
-            });
-            treeItems.push({
-                path: 'public/data/catalog.json',
-                mode: '100644',
-                type: 'blob',
-                sha: catalogBlobRes.data.sha
-            });
+            const blob = await octokit.rest.git.createBlob({ owner, repo, content: JSON.stringify(catalogData, null, 2), encoding: 'utf-8' });
+            treeItems.push({ path: 'public/data/catalog.json', mode: '100644', type: 'blob', sha: blob.data.sha });
         }
 
         if (modifiedFiles.includes('archive.json')) {
-            const archiveBlobRes = await octokit.rest.git.createBlob({
-                owner, repo,
-                content: JSON.stringify(archiveData, null, 2),
-                encoding: 'utf-8'
-            });
-            treeItems.push({
-                path: 'public/data/archive.json',
-                mode: '100644',
-                type: 'blob',
-                sha: archiveBlobRes.data.sha
-            });
+            const blob = await octokit.rest.git.createBlob({ owner, repo, content: JSON.stringify(archiveData, null, 2), encoding: 'utf-8' });
+            treeItems.push({ path: 'public/data/archive.json', mode: '100644', type: 'blob', sha: blob.data.sha });
         }
 
-        for (const img of images) {
+        for (const img of imagesToPush) {
             const base64Content = img.contentBase64.replace(/^data:image\/\w+;base64,/, "");
-            const imgBlobRes = await octokit.rest.git.createBlob({
-                owner, repo,
-                content: base64Content,
-                encoding: 'base64'
-            });
-            treeItems.push({
-                path: img.path,
-                mode: '100644',
-                type: 'blob',
-                sha: imgBlobRes.data.sha
-            });
+            const imgBlob = await octokit.rest.git.createBlob({ owner, repo, content: base64Content, encoding: 'base64' });
+            treeItems.push({ path: img.path, mode: '100644', type: 'blob', sha: imgBlob.data.sha });
         }
 
-        // C. Construct composite overlay Tree structure
-        const treeRes = await octokit.rest.git.createTree({
-            owner, repo,
-            tree: treeItems,
-            base_tree: rootTreeSha
-        });
-
-        // D. Commit merged tree upstream
+        const treeRes = await octokit.rest.git.createTree({ owner, repo, tree: treeItems, base_tree: rootTreeSha });
         const newCommitRes = await octokit.rest.git.createCommit({
             owner, repo,
-            message: commitMessage || 'Dashboard Automation: Catalog Configuration Update',
+            message: commitMessage || 'Dashboard: Catalog configuration update',
             tree: treeRes.data.sha,
             parents: [commitSha]
         });
+        await octokit.rest.git.updateRef({ owner, repo, ref: `heads/${branch}`, sha: newCommitRes.data.sha });
 
-        // E. Adjust branch pointer (push execution)
-        await octokit.rest.git.updateRef({
-            owner, repo,
-            ref: `heads/${branch}`,
-            sha: newCommitRes.data.sha
-        });
-
-        return new Response(JSON.stringify({ 
-            success: true, 
-            commitUrl: newCommitRes.data.html_url 
-        }), { status: 200, headers: { 'Content-Type': 'application/json' } });
+        return new Response(JSON.stringify({ success: true, commitUrl: newCommitRes.data.html_url }), { status: 200, headers: { 'Content-Type': 'application/json' } });
 
     } catch (error) {
         console.error("Dashboard GitHub Publish Pipeline Error:", error);
