@@ -1,14 +1,31 @@
-import fs from 'fs';
-import path from 'path';
+import { Octokit } from 'octokit';
+import { unstable_noStore as noStore } from 'next/cache';
 import CatalogManager from '../../components/dashboard/CatalogManager';
 
-// Force dynamic since we want to read the latest JSON on every load
+const IS_PROD = process.env.NODE_ENV === 'production';
+
+// Force dynamic rendering — never serve a stale cached version of this page
 export const dynamic = 'force-dynamic';
 
+async function getCatalogData() {
+    if (IS_PROD) {
+        noStore(); // Opt out of all caching
+        const octokit = new Octokit({ auth: process.env.GITHUB_API_TOKEN });
+        const res = await octokit.rest.repos.getContent({
+            owner: 'velcaryn', repo: 'velcaryn-web', path: 'public/data/catalog.json'
+        });
+        const content = Buffer.from(res.data.content, 'base64').toString('utf8');
+        return JSON.parse(content);
+    } else {
+        const fs = require('fs');
+        const path = require('path');
+        const catalogPath = path.join(process.cwd(), 'public', 'data', 'catalog.json');
+        return JSON.parse(fs.readFileSync(catalogPath, 'utf8'));
+    }
+}
+
 export default async function DashboardHome() {
-    // Read the current catalog.json directly from the public folder
-    const catalogPath = path.join(process.cwd(), 'public', 'data', 'catalog.json');
-    const catalogData = JSON.parse(fs.readFileSync(catalogPath, 'utf8'));
+    const catalogData = await getCatalogData();
 
     return (
         <div>

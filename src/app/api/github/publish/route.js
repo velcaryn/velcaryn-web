@@ -1,4 +1,5 @@
 import { Octokit } from 'octokit';
+import { revalidatePath } from 'next/cache';
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../../auth/[...nextauth]/route";
 import fs from 'fs';
@@ -174,6 +175,12 @@ export async function POST(req) {
             parents: [commitSha]
         });
         await octokit.rest.git.updateRef({ owner, repo, ref: `heads/${branch}`, sha: newCommitRes.data.sha });
+
+        // Immediately purge Next.js page cache so the next visitor gets fresh data
+        // without needing a hard refresh or waiting for a full Netlify rebuild
+        revalidatePath('/', 'layout');        // public homepage
+        revalidatePath('/catalog', 'page');   // public catalog
+        revalidatePath('/dashboard', 'layout'); // entire dashboard subtree
 
         return new Response(JSON.stringify({ success: true, commitUrl: newCommitRes.data.html_url }), { status: 200, headers: { 'Content-Type': 'application/json' } });
 
