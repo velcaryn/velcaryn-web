@@ -1,0 +1,22 @@
+{
+  "archived_products": [
+    {
+      "id": "test",
+      "name": "Test",
+      "category": "respiratory",
+      "description": "TEst Products TEst Products TEst Products TEst Products TEst Products ",
+      "image": "images/products/test.png",
+      "isQuoteOnly": true,
+      "archivedAt": "2026-03-11T10:03:55.478Z"
+    },
+    {
+      "id": "test-tube-12tr86218gif",
+      "name": "Test Tube 12tr86218gif ",
+      "category": "surgical_dressings",
+      "description": "123 Test Tube 12tr86218gif Test Tube 12tr86218gif Test Tube 12tr86218gif Test Tube 12tr86218gif Test Tube 12tr86218gif ",
+      "image": "images/products/test-tube-12tr86218gif.png",
+      "isQuoteOnly": true,
+      "archivedAt": "2026-03-11T09:48:25.820Z"
+    }
+  ]
+}

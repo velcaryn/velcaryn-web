@@ -126,13 +126,17 @@ export default function Catalog() {
                                         <h3>{product.name}</h3>
                                         <p className="product-desc">{product.description}</p>
                                         <div style={{ marginTop: 'auto', paddingTop: '15px' }}>
-                                            <button
-                                                className={`btn ${inCart ? 'btn-secondary' : 'btn-primary'}`}
-                                                style={{ width: '100%', fontSize: '0.85rem' }}
-                                                onClick={buttonAction}
-                                            >
-                                                {buttonText}
-                                            </button>
+                                            {product.isQuoteOnly ? (
+                                                <button
+                                                    className={`btn ${inCart ? 'btn-secondary' : 'btn-primary'}`}
+                                                    style={{ width: '100%', fontSize: '0.85rem' }}
+                                                    onClick={buttonAction}
+                                                >
+                                                    {buttonText}
+                                                </button>
+                                            ) : (
+                                                <button className="btn btn-primary" style={{ width: '100%', fontSize: '0.85rem', visibility: 'hidden', pointerEvents: 'none' }}>EmptySpace</button>
+                                            )}
                                         </div>
                                     </div>
                                 </div>

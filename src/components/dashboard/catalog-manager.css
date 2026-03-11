@@ -1,0 +1,90 @@
+/* Custom 4-Column Grid Enforcement for Dashboard Reordering */
+
+.exact-four-column-grid {
+    display: grid;
+    /* Force exactly 4 columns on large screens to mimic live site structure */
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1.5rem;
+    align-items: stretch;
+}
+
+/* Ensure mobile degradation remains 1-by-1 for visibility */
+@media (max-width: 1024px) {
+    .exact-four-column-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 768px) {
+    .exact-four-column-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Wrapper to hold hover controls */
+.draggable-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+.draggable-card {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    background: white;
+    height: 100%; /* Ensures all cards stretch equally vertically */
+}
+
+/* Drag Handle Styling */
+.drag-handle-bar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #f8f9fa;
+    border-bottom: 1px solid #e9ecef;
+    padding: 6px;
+    cursor: grab;
+    border-radius: 8px 8px 0 0;
+}
+
+.drag-handle-bar:active {
+    cursor: grabbing;
+    background-color: #e9ecef;
+}
+
+/* Elegant "To Top" Hover Button */
+.to-top-btn {
+    position: absolute;
+    top: -12px;
+    right: -12px;
+    background: var(--primary-color);
+    color: white;
+    border: 2px solid white;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    opacity: 0;
+    transform: translateY(10px) scale(0.9);
+    transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 50; /* Above drag handle */
+}
+
+/* Show button when mouse enters the wrapper */
+.draggable-wrapper:hover .to-top-btn {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.to-top-btn:hover {
+    background: #6a3bb5; /* slightly lighter primary */
+    transform: translateY(-2px) scale(1.05);
+}
+
+/* Remove button from grid #1 index since it's already at top */
+.draggable-wrapper:first-child .to-top-btn {
+    display: none;
+}
