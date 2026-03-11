@@ -23,6 +23,14 @@
   ],
   "products": [
     {
+      "id": "test",
+      "name": "Test",
+      "category": "surgical_dressings",
+      "description": "Test",
+      "image": "images/products/test.png",
+      "isQuoteOnly": true
+    },
+    {
       "id": "CH0045",
       "name": "Ambu Bag",
       "category": "respiratory",
