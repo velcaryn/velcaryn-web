@@ -14,9 +14,10 @@ export default function Catalog() {
 
     const { cart, addToCart, removeFromCart } = useCart();
 
-    const CATALOG_URL = typeof window !== 'undefined' && window.location.hostname !== 'localhost'
-        ? 'https://raw.githubusercontent.com/velcaryn/velcaryn-web/main/public/data/catalog.json'
-        : '/data/catalog.json';
+    // Uses NEXT_PUBLIC_CATALOG_URL in production (set in .env.local / Netlify env vars)
+    // to fetch from GitHub raw content directly, bypassing the stale CDN-cached static file.
+    // Falls back to the local file in development.
+    const CATALOG_URL = process.env.NEXT_PUBLIC_CATALOG_URL || '/data/catalog.json';
 
     useEffect(() => {
         fetch(CATALOG_URL, { cache: 'no-store' })

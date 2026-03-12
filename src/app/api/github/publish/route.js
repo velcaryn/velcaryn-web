@@ -4,20 +4,9 @@ import { getServerSession } from "next-auth/next";
 import { authOptions } from "../../auth/[...nextauth]/route";
 import fs from 'fs';
 import path from 'path';
+import { getCatalog, getArchive } from '../../../../lib/catalogData';
 
 const IS_PROD = process.env.NODE_ENV === 'production';
-
-// Helper: fetch a file from GitHub and return parsed JSON + its blob SHA
-async function getJsonFromGitHub(octokit, owner, repo, filePath) {
-    try {
-        const res = await octokit.rest.repos.getContent({ owner, repo, path: filePath });
-        const content = Buffer.from(res.data.content, 'base64').toString('utf8');
-        return { data: JSON.parse(content), sha: res.data.sha };
-    } catch (e) {
-        if (e.status === 404) return { data: null, sha: null };
-        throw e;
-    }
-}
 
 export async function POST(req) {
     const session = await getServerSession(authOptions);
@@ -30,35 +19,17 @@ export async function POST(req) {
         const body = await req.json();
         const { action, payload, commitMessage } = body;
 
-        // --- 1. Read latest state ---
-        // In production: read from GitHub to always get current truth.
-        // In development: read from local disk for instant staging feedback.
-        let catalogData, archiveData;
-
         if (!process.env.GITHUB_API_TOKEN) {
             return new Response(JSON.stringify({ error: "GITHUB_API_TOKEN is not configured on this server." }), { status: 500, headers: { 'Content-Type': 'application/json' } });
         }
 
-        const octokit = new Octokit({ auth: process.env.GITHUB_API_TOKEN });
         const owner = 'velcaryn';
         const repo = 'velcaryn-web';
         const branch = 'main';
 
-        if (IS_PROD) {
-            // Always read from GitHub in production
-            const catalogResult = await getJsonFromGitHub(octokit, owner, repo, 'public/data/catalog.json');
-            catalogData = catalogResult.data || { products: [], categories: [] };
-
-            const archiveResult = await getJsonFromGitHub(octokit, owner, repo, 'public/data/archive.json');
-            archiveData = archiveResult.data || { archived_products: [] };
-        } else {
-            // Read from local disk in development
-            const catalogPath = path.join(process.cwd(), 'public', 'data', 'catalog.json');
-            catalogData = JSON.parse(fs.readFileSync(catalogPath, 'utf8'));
-            
-            const archivePath = path.join(process.cwd(), 'public', 'data', 'archive.json');
-            archiveData = fs.existsSync(archivePath) ? JSON.parse(fs.readFileSync(archivePath, 'utf8')) : { archived_products: [] };
-        }
+        // Read latest state via the shared data layer (prod: GitHub API, dev: local disk)
+        let catalogData = await getCatalog();
+        let archiveData = await getArchive();
 
         let imagesToPush = [];
         let modifiedFiles = ['catalog.json'];
@@ -141,9 +112,11 @@ export async function POST(req) {
                 if (!fs.existsSync(imageDir)) fs.mkdirSync(imageDir, { recursive: true });
                 fs.writeFileSync(imagePath, base64Data, 'base64');
             }
+            // In dev: skip the GitHub API commit entirely, just return success immediately
+            return new Response(JSON.stringify({ success: true, local: true }), { status: 200, headers: { 'Content-Type': 'application/json' } });
         }
 
-        // --- 4. Commit to GitHub ---
+        // --- 4. Commit to GitHub (production only) ---
         const refRes = await octokit.rest.git.getRef({ owner, repo, ref: `heads/${branch}` });
         const commitSha = refRes.data.object.sha;
         const commitRes = await octokit.rest.git.getCommit({ owner, repo, commit_sha: commitSha });
