@@ -39,19 +39,19 @@
       "isQuoteOnly": true
     },
     {
-      "id": "CH0051",
-      "name": "IV Drip Set",
-      "category": "disposables",
-      "description": "Sterile intravenous infusion set with precision flow regulator for safe and controlled fluid administration.",
-      "image": "assets/iv_drip_set_1772694247376.png",
-      "isQuoteOnly": true
-    },
-    {
       "id": "CH0045",
       "name": "Ambu Bag",
       "category": "respiratory",
       "description": "Manual resuscitator available in Infant, Child, and Adult sizes. Suitable for emergency ventilation support.",
       "image": "assets/ambu_bag_1772694616129.png",
+      "isQuoteOnly": true
+    },
+    {
+      "id": "CH0051",
+      "name": "IV Drip Set",
+      "category": "disposables",
+      "description": "Sterile intravenous infusion set with precision flow regulator for safe and controlled fluid administration.",
+      "image": "assets/iv_drip_set_1772694247376.png",
       "isQuoteOnly": true
     },
     {
