@@ -14,8 +14,12 @@ export default function Catalog() {
 
     const { cart, addToCart, removeFromCart } = useCart();
 
+    const CATALOG_URL = typeof window !== 'undefined' && window.location.hostname !== 'localhost'
+        ? 'https://raw.githubusercontent.com/velcaryn/velcaryn-web/main/public/data/catalog.json'
+        : '/data/catalog.json';
+
     useEffect(() => {
-        fetch('/data/catalog.json')
+        fetch(CATALOG_URL, { cache: 'no-store' })
             .then(res => res.json())
             .then(data => {
                 setAllProducts(data.products);
