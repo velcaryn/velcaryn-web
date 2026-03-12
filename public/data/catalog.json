@@ -31,19 +31,19 @@
       "isQuoteOnly": true
     },
     {
-      "id": "CH0051",
-      "name": "IV Drip Set",
-      "category": "disposables",
-      "description": "Sterile intravenous infusion set with precision flow regulator for safe and controlled fluid administration.",
-      "image": "assets/iv_drip_set_1772694247376.png",
-      "isQuoteOnly": true
-    },
-    {
       "id": "CH0001",
       "name": "Gauze Swab",
       "category": "surgical_dressings",
       "description": "Gamma sterile gauze swab for surgical wound care applications. Available in sterilized packaging for clinical use.",
       "image": "assets/gauze_swab_1772694263691.png",
+      "isQuoteOnly": true
+    },
+    {
+      "id": "CH0051",
+      "name": "IV Drip Set",
+      "category": "disposables",
+      "description": "Sterile intravenous infusion set with precision flow regulator for safe and controlled fluid administration.",
+      "image": "assets/iv_drip_set_1772694247376.png",
       "isQuoteOnly": true
     },
     {
