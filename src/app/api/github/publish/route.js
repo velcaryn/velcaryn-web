@@ -32,7 +32,7 @@ export async function POST(req) {
         let imagesToPush = [];
         let modifiedFiles = ['catalog.json'];
 
-        // --- 2. Apply state mutation ---
+        // --- Apply state mutation based on action ---
         if (action === 'UPDATE_PRODUCT') {
             const { product, imageContentBase64 } = payload;
             const existingIndex = catalogData.products.findIndex(p => p.id === product.id);
@@ -95,8 +95,10 @@ export async function POST(req) {
             return new Response(JSON.stringify({ error: "Invalid Action Descriptor" }), { status: 400 });
         }
 
-        // --- 3. Write to local disk ONLY in development (Netlify is read-only) ---
+        // --- In development: write to local disk and return immediately (no GitHub API call needed) ---
         if (!IS_PROD) {
+            const fs = require('fs');
+            const path = require('path');
             const catalogPath = path.join(process.cwd(), 'public', 'data', 'catalog.json');
             const archivePath = path.join(process.cwd(), 'public', 'data', 'archive.json');
             fs.writeFileSync(catalogPath, JSON.stringify(catalogData, null, 2), 'utf8');
@@ -110,11 +112,12 @@ export async function POST(req) {
                 if (!fs.existsSync(imageDir)) fs.mkdirSync(imageDir, { recursive: true });
                 fs.writeFileSync(imagePath, base64Data, 'base64');
             }
-            // In dev: skip the GitHub API commit entirely, just return success immediately
             return new Response(JSON.stringify({ success: true, local: true }), { status: 200, headers: { 'Content-Type': 'application/json' } });
         }
 
-        // --- 4. Commit to GitHub (production only) ---
+        // --- In production: commit all changes to GitHub ---
+        const octokit = new Octokit({ auth: process.env.GITHUB_API_TOKEN });
+
         const refRes = await octokit.rest.git.getRef({ owner, repo, ref: `heads/${branch}` });
         const commitSha = refRes.data.object.sha;
         const commitRes = await octokit.rest.git.getCommit({ owner, repo, commit_sha: commitSha });
@@ -147,11 +150,9 @@ export async function POST(req) {
         });
         await octokit.rest.git.updateRef({ owner, repo, ref: `heads/${branch}`, sha: newCommitRes.data.sha });
 
-        // Immediately purge Next.js page cache so the next visitor gets fresh data
-        // without needing a hard refresh or waiting for a full Netlify rebuild
-        revalidatePath('/', 'layout');        // public homepage
-        revalidatePath('/catalog', 'page');   // public catalog
-        revalidatePath('/dashboard', 'layout'); // entire dashboard subtree
+        // Purge Next.js page cache so next request gets fresh data
+        revalidatePath('/', 'layout');
+        revalidatePath('/dashboard', 'layout');
 
         return new Response(JSON.stringify({ success: true, commitUrl: newCommitRes.data.html_url }), { status: 200, headers: { 'Content-Type': 'application/json' } });
 
