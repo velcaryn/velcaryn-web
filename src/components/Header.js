@@ -33,7 +33,7 @@ export default function Header() {
         <header id="header" className={scrolled ? 'scrolled' : ''}>
             <div className="container header-container">
                 <div className="logo">
-                    <Link href="#" style={{ textDecoration: 'none' }}>
+                    <Link href="/" style={{ textDecoration: 'none' }}>
                         <span style={{ fontSize: '1.8rem', fontWeight: '800', color: 'var(--primary-color)', letterSpacing: '-0.5px' }}>velcaryn</span>
                     </Link>
                 </div>
@@ -50,7 +50,6 @@ export default function Header() {
                         <li><Link href="/#about" onClick={() => setMobileActive(false)}>About</Link></li>
                         <li><Link href="/#services" onClick={() => setMobileActive(false)}>Services</Link></li>
                         <li><Link href="/#catalog" onClick={() => setMobileActive(false)}>Products</Link></li>
-                        <li><Link href="#catalog" onClick={() => setMobileActive(false)}>Catalog</Link></li>
                         <li>
                             {isLoaded && cart.length > 0 ? (
                                 <>

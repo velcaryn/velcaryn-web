@@ -2,8 +2,6 @@ import { Octokit } from 'octokit';
 import { revalidatePath } from 'next/cache';
 import { getServerSession } from "next-auth/next";
 import { authOptions } from "../../auth/[...nextauth]/route";
-import fs from 'fs';
-import path from 'path';
 import { getCatalog, getArchive } from '../../../../lib/catalogData';
 
 const IS_PROD = process.env.NODE_ENV === 'production';

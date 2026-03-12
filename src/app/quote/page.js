@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useMemo } from 'react';
+import { toast } from 'react-hot-toast';
 import Select from 'react-select';
 import countryList from 'react-select-country-list';
 import PhoneInput from 'react-phone-input-2';
@@ -62,22 +63,22 @@ export default function QuotePage() {
         e.preventDefault();
 
         if (cart.length === 0) {
-            alert("Please select at least one item before requesting a quote.");
+            toast.error("Please select at least one item before requesting a quote.");
             return;
         }
 
         if (!formData.phone || formData.phone.length < 5) {
-            alert("Please enter a valid phone number.");
+            toast.error("Please enter a valid phone number.");
             return;
         }
 
         if (!formData.country) {
-            alert("Please select a valid country.");
+            toast.error("Please select a valid country.");
             return;
         }
 
         if (!formData.subject) {
-            alert("Please enter a subject.");
+            toast.error("Please enter a subject.");
             return;
         }
 

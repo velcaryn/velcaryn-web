@@ -1,10 +1,12 @@
 "use client";
 import React, { useState, useCallback, useEffect } from 'react';
 import { toast } from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
 import Cropper from 'react-easy-crop';
 import getCroppedImg from '../../utils/cropImage';
 
 export default function AddProductForm({ categories: defaultCategories, initialData = null, draftId = null }) {
+    const router = useRouter();
     const [categories, setCategories] = useState(defaultCategories);
     const [name, setName] = useState(initialData?.name || '');
     const [category, setCategory] = useState(initialData?.category || defaultCategories[0]?.id || '');
@@ -103,9 +105,7 @@ export default function AddProductForm({ categories: defaultCategories, initialD
         }
 
         toast.success("Saved to local drafts!");
-        setTimeout(() => {
-            window.location.href = '/dashboard/drafts';
-        }, 1000);
+        setTimeout(() => { router.push('/dashboard/drafts'); }, 1000);
     };
 
     const handlePublish = async () => {
@@ -155,9 +155,7 @@ export default function AddProductForm({ categories: defaultCategories, initialD
                     localStorage.setItem('velcaryn_drafts', JSON.stringify(drafts.filter(d => d.id !== draftId)));
                 }
                 toast.success("Successfully synced product with the Velcaryn Network! ✔️");
-                setTimeout(() => {
-                    window.location.href = '/dashboard';
-                }, 1500);
+                setTimeout(() => { router.push('/dashboard'); }, 1500);
             } else {
                 const data = await res.json();
                 toast.error(`Error: ${data.error || 'Pipeline execution fault'}`);
