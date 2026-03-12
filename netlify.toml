@@ -1,6 +1,10 @@
 [build]
   command = "npm run build"
   publish = ".next"
+  # Only rebuild when actual code changes — skip if only data/image files changed.
+  # Dashboard publish actions (catalog.json, archive.json, images) won't trigger a rebuild,
+  # saving Netlify build minutes entirely for those operations.
+  ignore = "git diff --quiet HEAD^ HEAD -- . ':!public/data/' ':!public/images/'"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
