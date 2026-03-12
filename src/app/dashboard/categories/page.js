@@ -1,4 +1,4 @@
-import { getCatalog } from '../../../../lib/catalogData';
+import { getCatalog } from '../../../lib/catalogData';
 import CategoriesClient from '../../../components/dashboard/CategoriesClient';
 
 export const dynamic = 'force-dynamic';

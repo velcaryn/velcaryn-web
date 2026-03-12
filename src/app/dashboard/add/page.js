@@ -1,4 +1,4 @@
-import { getCatalog, getArchive } from '../../../../lib/catalogData';
+import { getCatalog, getArchive } from '../../../lib/catalogData';
 import AddProductForm from '../../../components/dashboard/AddProductForm';
 
 export const dynamic = 'force-dynamic';

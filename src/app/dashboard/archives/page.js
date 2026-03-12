@@ -1,4 +1,4 @@
-import { getCatalog, getArchive } from '../../../../lib/catalogData';
+import { getCatalog, getArchive } from '../../../lib/catalogData';
 import ArchivesClient from '../../../components/dashboard/ArchivesClient';
 
 export const dynamic = 'force-dynamic';
