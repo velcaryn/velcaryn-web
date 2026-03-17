@@ -12,7 +12,7 @@ export default function Founders() {
                 {/*  Founder 1: Arumugasamy  */}
                 <div className="founder-card">
                     <div className="founder-img-wrapper">
-                        <img src="assets/arumugasamy.jpg" alt="Arumugasamy Sureshram" loading="lazy" />
+                        <img src="assets/arumugasamy.jpg?v=2" alt="Arumugasamy Sureshram" loading="lazy" />
                     </div>
                     <div className="founder-info">
                         <div className="founder-header">
@@ -59,7 +59,7 @@ export default function Founders() {
                 {/*  Founder 2: Dr. Guru Praveen  */}
                 <div className="founder-card">
                     <div className="founder-img-wrapper">
-                        <img src="assets/guru_praveen.jpg" alt="Dr. Guru Praveen" loading="lazy" />
+                        <img src="assets/guru_praveen.jpg?v=2" alt="Dr. Guru Praveen" loading="lazy" />
                     </div>
                     <div className="founder-info">
                         <div className="founder-header">
