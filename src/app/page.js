@@ -73,9 +73,9 @@ export default function Home() {
         </div>
       </section>
 
-      <Founders />
-
       <Catalog />
+
+      <Founders />
 
       <section id="contact" className="section section-cta text-center">
         <div className="container contact-container">

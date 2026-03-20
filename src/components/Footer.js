@@ -23,10 +23,20 @@ export default function Footer() {
                     <p>info@velcaryn.com</p>
                     <p>+91 99447 88655</p>
                     <p>+91 99447 88165</p>
+                    <div style={{ marginTop: '0.5rem', display: 'flex', gap: '0.8rem' }}>
+                        <a href="https://www.instagram.com/velcaryn.group" target="_blank" style={{ color: 'var(--bg-white)', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+                            </svg>
+                            Instagram
+                        </a>
+                    </div>
                 </div>
             </div>
             <div className="footer-bottom text-center">
-                <p>&copy; {(new Date()).getFullYear()} Velcaryn. All rights reserved.</p>
+                <p>&copy; {(new Date()).getFullYear()} Velcaryn LLP. All rights reserved.</p>
             </div>
         </footer>
     );
