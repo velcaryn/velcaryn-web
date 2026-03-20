@@ -5,7 +5,7 @@ export default function Footer() {
         <footer>
             <div className="container footer-container">
                 <div className="footer-brand">
-                    <img src="/assets/logo.png" alt="Velcaryn" className="footer-logo" />
+                    <img src="/assets/VELCARYN-SVG.svg" alt="Velcaryn" className="footer-logo" />
                     <p>Global Export & Import Solutions.</p>
                 </div>
                 <div className="footer-links">

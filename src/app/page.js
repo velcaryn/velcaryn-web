@@ -19,7 +19,7 @@ export default function Home() {
             </div>
           </div>
           <div className="hero-logo-watermark">
-            <img src="/assets/logo.png" alt="" aria-hidden="true" />
+            <img src="/assets/VELCARYN-SVG.svg" alt="" aria-hidden="true" />
           </div>
         </div>
       </section>
@@ -79,7 +79,7 @@ export default function Home() {
 
       <section id="contact" className="section section-cta text-center">
         <div className="container contact-container">
-          <img src="/assets/logo.png" alt="Velcaryn" className="contact-logo" />
+          <img src="/assets/VELCARYN-SVG.svg" alt="Velcaryn" className="contact-logo" />
           <h2>Ready to expand your global reach?</h2>
           <p>Contact the Velcaryn team today to discuss your specific export and import requirements.</p>
           <div className="contact-phones">

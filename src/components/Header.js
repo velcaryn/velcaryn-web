@@ -34,7 +34,7 @@ export default function Header() {
             <div className="container header-container">
                 <div className="logo">
                     <Link href="/" style={{ textDecoration: 'none' }}>
-                        <span style={{ fontSize: '1.8rem', fontWeight: '800', color: 'var(--primary-color)', letterSpacing: '-0.5px' }}>velcaryn</span>
+                        <img src="/assets/VELCARYN-SVG.svg" alt="Velcaryn" className="header-logo" />
                     </Link>
                 </div>
 
