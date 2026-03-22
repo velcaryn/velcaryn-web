@@ -6,7 +6,6 @@ import countryList from 'react-select-country-list';
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/style.css';
 import { useCart } from '../../context/CartContext';
-import emailjs from '@emailjs/browser';
 import { useRouter } from 'next/navigation';
 import Header from '../../components/Header';
 import Footer from '../../components/Footer';
@@ -48,7 +47,8 @@ export default function QuotePage() {
         region: null,
         regionText: '',
         subject: '',
-        message: ''
+        message: '',
+        bot_trap: '' // Honeypot trap explicitly for scraper bots parsing native forms
     });
 
     const statesForCountry = useMemo(() => {
@@ -98,15 +98,24 @@ export default function QuotePage() {
                 subject: formData.subject,
                 message: formData.message,
                 requested_items: itemsList,
-                total_items: cart.length
+                total_items: cart.length,
+                bot_trap: formData.bot_trap
             };
 
-            await emailjs.send(
-                process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID || 'YOUR_SERVICE_ID',
-                process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID || 'YOUR_TEMPLATE_ID',
-                templateParams,
-                process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY || 'YOUR_PUBLIC_KEY'
-            );
+            const response = await fetch('/api/quote', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(templateParams)
+            });
+
+            if (!response.ok) {
+                if (response.status === 429) {
+                    toast.error("You're submitting too fast. Please wait a while before requesting another quote.");
+                } else {
+                    throw new Error('Server declined request');
+                }
+                return;
+            }
 
             setSubmitSuccess(true);
             clearCart();
@@ -227,6 +236,19 @@ export default function QuotePage() {
                                             placeholder="Enter last name"
                                         />
                                     </div>
+                                </div>
+
+                                {/* Bot Trap Honeypot - Invisible purely to trap automated scrapers */}
+                                <div style={{ position: 'absolute', opacity: 0, zIndex: -1, pointerEvents: 'none', height: 0, width: 0, overflow: 'hidden' }} aria-hidden="true">
+                                    <label>Add Address line 2</label>
+                                    <input 
+                                        type="text" 
+                                        name="address_line_2" 
+                                        tabIndex="-1" 
+                                        autoComplete="off"
+                                        value={formData.bot_trap}
+                                        onChange={(e) => setFormData({ ...formData, bot_trap: e.target.value })}
+                                    />
                                 </div>
 
                                 <div className="responsive-grid-2">
