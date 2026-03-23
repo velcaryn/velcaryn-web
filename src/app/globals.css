@@ -632,6 +632,14 @@ header.scrolled {
     border-top: 1px solid rgba(72, 38, 131, 0.1);
 }
 
+.footer-social-panel {
+    margin-top: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    align-items: flex-start;
+}
+
 .contact-icon {
     display: inline-flex;
     align-items: center;
@@ -1177,6 +1185,10 @@ footer {
     .footer-links a:hover {
         padding-left: 0;
     }
+
+    .footer-social-panel {
+        align-items: center;
+    }
 }
 
 /* ======================= */
@@ -1457,5 +1469,25 @@ footer {
     }
     .pdp-title {
         font-size: 2rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .pdp-wrapper {
+        padding-top: 100px;
+        padding-bottom: 60px;
+    }
+    .pdp-image-container {
+        padding: 1rem;
+    }
+    .pdp-details-container {
+        padding: 1.5rem 1rem;
+    }
+    .pdp-title {
+        font-size: 1.75rem;
+    }
+    .pdp-quote-btn {
+        padding: 1.25rem 1rem; 
+        font-size: 1.05rem;
     }
 }
