@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import { useCart } from '../context/CartContext';
 
 export default function Catalog() {
@@ -59,6 +60,7 @@ export default function Catalog() {
                             placeholder="Search products..."
                             value={searchTerm}
                             onChange={e => setSearchTerm(e.target.value)}
+                            suppressHydrationWarning
                         />
                     </div>
                     <div className="filter-box">
@@ -66,6 +68,7 @@ export default function Catalog() {
                             id="catalog-category"
                             value={selectedCategory}
                             onChange={e => setSelectedCategory(e.target.value)}
+                            suppressHydrationWarning
                         >
                             {categories.map(cat => (
                                 <option key={cat.id} value={cat.id}>{cat.name}</option>
@@ -115,20 +118,26 @@ export default function Catalog() {
                                         </button>
                                     )}
                                     {product.image ? (
-                                        <div className="product-img"><img src={`/${product.image}`} alt={product.name} loading="lazy" /></div>
+                                        <Link href={`/product/${product.id}`} style={{ display: 'block', overflow: 'hidden' }}>
+                                            <div className="product-img"><img src={`/${product.image}`} alt={product.name} loading="lazy" /></div>
+                                        </Link>
                                     ) : (
-                                        <div className="product-img product-img-placeholder">
-                                            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
-                                                <circle cx="8.5" cy="8.5" r="1.5" />
-                                                <polyline points="21 15 16 10 5 21" />
-                                            </svg>
-                                            <span>Image Coming Soon</span>
-                                        </div>
+                                        <Link href={`/product/${product.id}`} style={{ display: 'block', overflow: 'hidden' }}>
+                                            <div className="product-img product-img-placeholder">
+                                                <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                                                    <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
+                                                    <circle cx="8.5" cy="8.5" r="1.5" />
+                                                    <polyline points="21 15 16 10 5 21" />
+                                                </svg>
+                                                <span>Image Coming Soon</span>
+                                            </div>
+                                        </Link>
                                     )}
                                     <div className="product-content">
                                         <span className="product-category">{catName}</span>
-                                        <h3>{product.name}</h3>
+                                        <Link href={`/product/${product.id}`} style={{ textDecoration: 'none', color: 'inherit', display: 'inline-block' }}>
+                                            <h3 className="catalog-pdp-title-link">{product.name}</h3>
+                                        </Link>
                                         <p className="product-desc">{product.description}</p>
                                         <div style={{ marginTop: 'auto', paddingTop: '15px' }}>
                                             {product.isQuoteOnly ? (
