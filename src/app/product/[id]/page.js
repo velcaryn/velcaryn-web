@@ -1,12 +1,12 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, use } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCart } from '../../../context/CartContext';
 import Header from '../../../components/Header';
 import Footer from '../../../components/Footer';
 
 export default function ProductDetailPage({ params }) {
-    const { id } = params;
+    const { id } = use(params);
     const router = useRouter();
     const { cart, addToCart } = useCart();
     
