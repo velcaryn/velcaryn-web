@@ -299,6 +299,7 @@ export default function QuotePage() {
                                     <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', zIndex: 10 }}>
                                         <label style={{ fontSize: '14px', fontWeight: '600', color: '#374151' }}>Country <span style={{ color: '#ef4444' }}>*</span></label>
                                         <Select
+                                            instanceId="country-select"
                                             options={options}
                                             value={formData.country}
                                             onChange={country => setFormData({ ...formData, country, region: null, regionText: '' })}
@@ -323,6 +324,7 @@ export default function QuotePage() {
                                         <label style={{ fontSize: '14px', fontWeight: '600', color: '#374151' }}>Region / State</label>
                                         {statesForCountry.length > 0 ? (
                                             <Select
+                                                instanceId="region-select"
                                                 options={statesForCountry}
                                                 value={formData.region}
                                                 onChange={region => setFormData({ ...formData, region, regionText: '' })}
