@@ -1,3 +1,4 @@
+import Image from 'next/image';
 
 export default function Founders() {
     return (
@@ -11,8 +12,8 @@ export default function Founders() {
             <div className="founders-grid">
                 {/*  Founder 1: Arumugasamy  */}
                 <div className="founder-card">
-                    <div className="founder-img-wrapper">
-                        <img src="assets/arumugasamy.jpg?v=2" alt="Arumugasamy Sureshram" loading="lazy" />
+                    <div className="founder-img-wrapper" style={{ position: 'relative', width: '100%', aspectRatio: '1/1' }}>
+                        <Image src="/assets/arumugasamy.jpg" alt="Arumugasamy Sureshram" fill sizes="(max-width: 768px) 100vw, 33vw" style={{ objectFit: 'cover' }} />
                     </div>
                     <div className="founder-info">
                         <div className="founder-header">
@@ -58,8 +59,8 @@ export default function Founders() {
 
                 {/*  Founder 2: Dr. Guru Praveen  */}
                 <div className="founder-card">
-                    <div className="founder-img-wrapper">
-                        <img src="assets/guru_praveen.jpg?v=2" alt="Dr. Guru Praveen" loading="lazy" />
+                    <div className="founder-img-wrapper" style={{ position: 'relative', width: '100%', aspectRatio: '1/1' }}>
+                        <Image src="/assets/guru_praveen.jpg" alt="Dr. Guru Praveen" fill sizes="(max-width: 768px) 100vw, 33vw" style={{ objectFit: 'cover' }} />
                     </div>
                     <div className="founder-info">
                         <div className="founder-header">
@@ -104,8 +105,8 @@ export default function Founders() {
 
                 {/*  Founder 3: Selvamugesh  */}
                 <div className="founder-card">
-                    <div className="founder-img-wrapper">
-                        <img src="assets/selvamugesh.jpg" alt="Selvamugesh Rajmohan" loading="lazy" />
+                    <div className="founder-img-wrapper" style={{ position: 'relative', width: '100%', aspectRatio: '1/1' }}>
+                        <Image src="/assets/selvamugesh.jpg" alt="Selvamugesh Rajmohan" fill sizes="(max-width: 768px) 100vw, 33vw" style={{ objectFit: 'cover' }} />
                     </div>
                     <div className="founder-info">
                         <div className="founder-header">

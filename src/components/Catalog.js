@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useCart } from '../context/CartContext';
 
 export default function Catalog() {
@@ -119,7 +120,15 @@ export default function Catalog() {
                                     )}
                                     {product.image ? (
                                         <Link href={`/product/${product.id}`} style={{ display: 'block', overflow: 'hidden' }}>
-                                            <div className="product-img"><img src={`/${product.image}`} alt={product.name} loading="lazy" /></div>
+                                            <div className="product-img" style={{ position: 'relative' }}>
+                                                <Image 
+                                                    src={`/${product.image}`} 
+                                                    alt={product.name} 
+                                                    fill
+                                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                                    style={{ objectFit: 'cover' }}
+                                                />
+                                            </div>
                                         </Link>
                                     ) : (
                                         <Link href={`/product/${product.id}`} style={{ display: 'block', overflow: 'hidden' }}>
