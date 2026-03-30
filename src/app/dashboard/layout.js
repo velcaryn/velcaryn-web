@@ -21,7 +21,9 @@ export default async function DashboardLayout({ children }) {
             <ToasterProvider />
             <aside className="dashboard-sidebar">
                 <div className="sidebar-brand">
-                    <span className="brand-text">velcaryn</span>
+                    <Link href="/">
+                        <img src="/assets/VELCARYN-SVG.svg" alt="Velcaryn" style={{ width: '160px', marginBottom: '8px', filter: 'brightness(0) invert(1)' }} />
+                    </Link>
                     <span className="brand-badge">Admin</span>
                 </div>
                 <nav className="sidebar-nav">

@@ -14,6 +14,13 @@ export default function AddProductForm({ categories: defaultCategories, initialD
     const [isQuoteOnly, setIsQuoteOnly] = useState(initialData?.isQuoteOnly !== undefined ? initialData?.isQuoteOnly : false);
     const [existingImage, setExistingImage] = useState(initialData?.image || null);
     
+    // Specifications State List
+    const [specList, setSpecList] = useState(
+        initialData?.specifications 
+            ? Object.entries(initialData.specifications).map(([k,v]) => ({key: k, value: v})) 
+            : []
+    );
+    
     useEffect(() => {
         const savedCats = localStorage.getItem('velcaryn_draft_categories');
         if (savedCats) {
@@ -33,6 +40,11 @@ export default function AddProductForm({ categories: defaultCategories, initialD
                 setDescription(draft.description || '');
                 setIsQuoteOnly(draft.isQuoteOnly || false);
                 setExistingImage(draft.image || null);
+                if (draft.specifications) {
+                    setSpecList(Object.entries(draft.specifications).map(([k,v]) => ({key: k, value: v})));
+                } else {
+                    setSpecList([]);
+                }
             }
         }
     }, [draftId, initialData, categories]);
@@ -70,7 +82,14 @@ export default function AddProductForm({ categories: defaultCategories, initialD
 
     const handleSaveDraft = async () => {
         const idToSave = initialData?.id || Date.now().toString();
-        const draft = { name, category, description, isQuoteOnly, image: croppedImage || existingImage, id: idToSave, isDraft: true };
+        
+        // Collapse the key-value specList array down to an object
+        const collapsedSpecs = specList.reduce((acc, curr) => {
+            if (curr.key.trim() && curr.value.trim()) acc[curr.key.trim()] = curr.value.trim();
+            return acc;
+        }, {});
+
+        const draft = { name, category, description, isQuoteOnly, image: croppedImage || existingImage, id: idToSave, isDraft: true, specifications: Object.keys(collapsedSpecs).length > 0 ? collapsedSpecs : undefined };
         let existingDrafts = JSON.parse(localStorage.getItem('velcaryn_drafts') || '[]');
         
         // If editing an existing draft, update it instead of appending
@@ -126,6 +145,12 @@ export default function AddProductForm({ categories: defaultCategories, initialD
         // If croppedImage exists, we map it to our standardized directory tree.
         const resolvedImagePath = croppedImage ? `images/products/${productId}.png` : existingImage;
 
+        // Collapse the key-value specList array down to an object
+        const finalSpecs = specList.reduce((acc, curr) => {
+            if (curr.key.trim() && curr.value.trim()) acc[curr.key.trim()] = curr.value.trim();
+            return acc;
+        }, {});
+
         const payload = {
             product: {
                 id: productId,
@@ -133,7 +158,8 @@ export default function AddProductForm({ categories: defaultCategories, initialD
                 category,
                 description,
                 image: resolvedImagePath,
-                isQuoteOnly
+                isQuoteOnly,
+                specifications: Object.keys(finalSpecs).length > 0 ? finalSpecs : undefined
             },
             imageContentBase64: croppedImage // Null if they didn't upload a *new* image
         };
@@ -195,6 +221,52 @@ export default function AddProductForm({ categories: defaultCategories, initialD
                 <div style={{ marginBottom: '25px', display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <input type="checkbox" id="quoteOnly" checked={isQuoteOnly} onChange={e => setIsQuoteOnly(e.target.checked)} style={{ width: '18px', height: '18px' }} />
                     <label htmlFor="quoteOnly" style={{ fontWeight: '500', cursor: 'pointer' }}>Available for Requesting Quote</label>
+                </div>
+
+                {/* Dynamic Specifications Editor */}
+                <div style={{ marginBottom: '25px', padding: '15px', border: '1px solid #e2e8f0', borderRadius: '6px', backgroundColor: '#f8fafc' }}>
+                    <label style={{ display: 'block', marginBottom: '10px', fontWeight: 'bold' }}>Product Specifications</label>
+                    <p style={{ fontSize: '0.85rem', color: '#64748b', marginBottom: '15px' }}>Optional: Define technical specs, dimensions, or technical properties to be indexed on the main product details page.</p>
+
+                    {specList.map((spec, index) => (
+                        <div key={index} style={{ display: 'flex', gap: '10px', marginBottom: '10px' }}>
+                            <input 
+                                type="text" 
+                                placeholder="Property (e.g. Size)" 
+                                value={spec.key} 
+                                onChange={(e) => {
+                                    const newSpecs = [...specList];
+                                    newSpecs[index].key = e.target.value;
+                                    setSpecList(newSpecs);
+                                }}
+                                style={{ flex: 1, padding: '8px', border: '1px solid #cbd5e1', borderRadius: '4px' }} 
+                            />
+                            <input 
+                                type="text" 
+                                placeholder="Value (e.g. 10cm x 10cm)" 
+                                value={spec.value} 
+                                onChange={(e) => {
+                                    const newSpecs = [...specList];
+                                    newSpecs[index].value = e.target.value;
+                                    setSpecList(newSpecs);
+                                }}
+                                style={{ flex: 2, padding: '8px', border: '1px solid #cbd5e1', borderRadius: '4px' }} 
+                            />
+                            <button 
+                                onClick={() => setSpecList(specList.filter((_, i) => i !== index))}
+                                style={{ padding: '0 12px', backgroundColor: '#ef4444', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}
+                            >
+                                ✕
+                            </button>
+                        </div>
+                    ))}
+                    
+                    <button 
+                        onClick={() => setSpecList([...specList, { key: '', value: '' }])}
+                        style={{ marginTop: '10px', padding: '8px 16px', backgroundColor: '#e2e8f0', border: '1px solid #cbd5e1', borderRadius: '4px', cursor: 'pointer', fontSize: '0.9rem', fontWeight: '500' }}
+                    >
+                        + Add Specification Pair
+                    </button>
                 </div>
 
                 <div style={{ marginBottom: '25px' }}>
