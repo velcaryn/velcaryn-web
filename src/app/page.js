@@ -9,6 +9,17 @@ export default function Home() {
       <Header />
 
       <section id="hero" className="hero">
+        <video 
+           autoPlay 
+           loop 
+           muted 
+           playsInline 
+           className="hero-video-bg"
+        >
+          <source src="/assets/hero_video.mp4" type="video/mp4" />
+        </video>
+        <div className="hero-video-overlay"></div>
+        
         <div className="container hero-container">
           <div className="hero-content">
             <h1>Connecting Markets.<br /><span>Moving the World.</span></h1>

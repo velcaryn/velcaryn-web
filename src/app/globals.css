@@ -329,38 +329,37 @@ header.scrolled {
     min-height: 85vh;
     display: flex;
     align-items: center;
-    background: linear-gradient(135deg, var(--bg-white) 0%, var(--bg-light) 100%);
+    background-color: var(--primary-color);
     overflow: hidden;
     border-bottom: var(--section-border);
 }
 
-.hero::before {
-    content: '';
+.hero-video-bg {
     position: absolute;
-    top: -50%;
-    right: -20%;
-    width: 80%;
-    height: 150%;
-    background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
-    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
-    opacity: 0.05;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    transform: translateX(-50%) translateY(-50%);
     z-index: 0;
-    animation: blobMorph 15s ease-in-out infinite alternate;
+    object-fit: cover;
 }
 
-@keyframes blobMorph {
-    0% {
-        border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
-    }
-
-    100% {
-        border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
-    }
+.hero-video-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(8, 22, 60, 0.7) 0%, rgba(3, 8, 26, 0.6) 100%);
+    z-index: 1;
 }
 
 .hero-container {
     position: relative;
-    z-index: 1;
+    z-index: 2;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -370,14 +369,19 @@ header.scrolled {
     max-width: 620px;
 }
 
+.hero h1 {
+    color: #ffffff;
+}
+
 .hero h1 span {
-    color: var(--primary-color);
+    color: #60a5fa; /* A vibrant premium blue that pops beautifully off a dark video background */
 }
 
 .hero p {
     font-size: 1.1rem;
     margin-bottom: 2.5rem;
     max-width: 540px;
+    color: rgba(255, 255, 255, 0.9);
 }
 
 .hero-buttons {
@@ -386,9 +390,21 @@ header.scrolled {
     flex-wrap: wrap;
 }
 
+.hero .btn-secondary {
+    color: #ffffff;
+    border-color: #ffffff;
+}
+
+.hero .btn-secondary:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    border-color: #ffffff;
+}
+
 .hero-logo-watermark {
-    opacity: 0.08;
+    opacity: 0.15;
     pointer-events: none;
+    filter: brightness(0) invert(1);
 }
 
 .hero-logo-watermark img {

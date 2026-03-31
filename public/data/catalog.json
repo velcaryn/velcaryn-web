@@ -31,19 +31,19 @@
       "isQuoteOnly": true
     },
     {
-      "id": "CH0045",
-      "name": "Ambu Bag",
-      "category": "respiratory",
-      "description": "Manual resuscitator available in Infant, Child, and Adult sizes. Suitable for emergency ventilation support.",
-      "image": "assets/ambu_bag_1772694616129.png",
-      "isQuoteOnly": true
-    },
-    {
       "id": "CH0001",
       "name": "Gauze Swab",
       "category": "surgical_dressings",
       "description": "Gamma sterile gauze swab for surgical wound care applications. Available in sterilized packaging for clinical use.",
       "image": "assets/gauze_swab_1772694263691.png",
+      "isQuoteOnly": true
+    },
+    {
+      "id": "CH0045",
+      "name": "Ambu Bag",
+      "category": "respiratory",
+      "description": "Manual resuscitator available in Infant, Child, and Adult sizes. Suitable for emergency ventilation support.",
+      "image": "assets/ambu_bag_1772694616129.png",
       "isQuoteOnly": true
     },
     {

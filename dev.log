@@ -1,0 +1,113 @@
+
+> velcaryn@0.1.0 dev
+> next dev
+
+▲ Next.js 16.1.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.1.38:3000
+- Environments: .env.local
+
+✓ Starting...
+✓ Ready in 602ms
+ GET / 200 in 439ms (compile: 255ms, render: 184ms)
+ GET /api/auth/session 200 in 555ms (compile: 543ms, render: 12ms)
+ GET /dashboard 307 in 216ms (compile: 162ms, render: 53ms)
+ GET /api/auth/signin?callbackUrl=/dashboard 200 in 9ms (compile: 3ms, render: 6ms)
+ GET / 200 in 93ms (compile: 7ms, render: 86ms)
+ GET /api/auth/session 200 in 12ms (compile: 3ms, render: 9ms)
+ GET / 200 in 69ms (compile: 4ms, render: 66ms)
+ GET /api/auth/session 200 in 9ms (compile: 3ms, render: 6ms)
+ GET /api/auth/session 200 in 7ms (compile: 1073µs, render: 6ms)
+ GET /dashboard 200 in 83ms (compile: 7ms, render: 75ms)
+ GET /api/auth/session 200 in 9ms (compile: 2ms, render: 6ms)
+ GET /api/auth/session 200 in 5ms (compile: 695µs, render: 5ms)
+ POST /api/github/publish 200 in 69ms (compile: 61ms, render: 8ms)
+ GET /api/auth/session 200 in 13ms (compile: 5ms, render: 8ms)
+ GET /api/auth/session 200 in 6ms (compile: 1041µs, render: 5ms)
+ GET /api/auth/signin?callbackUrl=/dashboard 200 in 8ms (compile: 4ms, render: 4ms)
+ GET /dashboard 307 in 59ms (compile: 6ms, render: 53ms)
+ GET /api/auth/session 200 in 13ms (compile: 6ms, render: 7ms)
+ GET /api/auth/session 200 in 6ms (compile: 951µs, render: 5ms)
+ POST /api/github/publish 200 in 17ms (compile: 5ms, render: 12ms)
+ GET /api/auth/session 200 in 12ms (compile: 5ms, render: 6ms)
+ GET /api/auth/session 200 in 6ms (compile: 1036µs, render: 5ms)
+ GET / 200 in 64ms (compile: 4ms, render: 60ms)
+ GET /api/auth/session 200 in 8ms (compile: 3ms, render: 5ms)
+ GET /api/auth/session 200 in 6ms (compile: 1002µs, render: 5ms)
+ GET /api/auth/session 200 in 12ms (compile: 5ms, render: 8ms)
+ GET /api/auth/session 200 in 7ms (compile: 1235µs, render: 6ms)
+✓ Compiled in 671ms
+ GET / 200 in 354ms (compile: 216ms, render: 138ms)
+⨯ Error: Module [project]/src/components/dashboard/CatalogManager.js [app-ssr] (ecmascript) was instantiated because it was required from module [project]/node_modules/next/dist/esm/build/templates/app-page.js?page=/page { GLOBAL_ERROR_MODULE => "[project]/node_modules/next/dist/client/components/builtin/global-error.js [app-rsc] (ecmascript, Next.js Server Component)", METADATA_0 => "[project]/src/app/icon.svg.mjs { IMAGE => \"[project]/src/app/icon.svg (static in ecmascript, tag client)\" } [app-rsc] (structured image object, ecmascript, Next.js Server Component)", MODULE_1 => "[project]/src/app/layout.js [app-rsc] (ecmascript, Next.js Server Component)", MODULE_2 => "[project]/node_modules/next/dist/client/components/builtin/not-found.js [app-rsc] (ecmascript, Next.js Server Component)", MODULE_3 => "[project]/node_modules/next/dist/client/components/builtin/forbidden.js [app-rsc] (ecmascript, Next.js Server Component)", MODULE_4 => "[project]/node_modules/next/dist/client/components/builtin/unauthorized.js [app-rsc] (ecmascript, Next.js Server Component)", MODULE_5 => "[project]/node_modules/next/dist/client/components/builtin/global-error.js [app-rsc] (ecmascript, Next.js Server Component)", METADATA_6 => "[project]/src/app/icon.svg.mjs { IMAGE => \"[project]/src/app/icon.svg (static in ecmascript, tag client)\" } [app-rsc] (structured image object, ecmascript, Next.js Server Component)", MODULE_7 => "[project]/src/app/page.js [app-rsc] (ecmascript, Next.js Server Component)" } [app-rsc] (ecmascript) <locals>, but the module factory is not available.
+    at ignore-listed frames {
+  digest: '2169288935'
+}
+ GET /dashboard 200 in 274ms (compile: 7ms, render: 268ms)
+ GET /dashboard 200 in 615ms (compile: 110ms, render: 505ms)
+ GET /dashboard 500 in 500ms (compile: 157ms, render: 343ms)
+ GET / 200 in 632ms (compile: 171ms, render: 461ms)
+ GET /api/auth/session 200 in 10ms (compile: 3ms, render: 7ms)
+ GET /api/auth/session 200 in 7ms (compile: 1265µs, render: 6ms)
+ GET /api/auth/session 200 in 6ms (compile: 963µs, render: 5ms)
+ GET /api/auth/session 200 in 49ms (compile: 28ms, render: 22ms)
+ GET /api/auth/session 200 in 9ms (compile: 2ms, render: 7ms)
+✓ Compiled in 115ms
+ GET /dashboard 200 in 37ms (compile: 5ms, render: 32ms)
+ GET / 200 in 248ms (compile: 138ms, render: 110ms)
+ GET /api/auth/session 200 in 16ms (compile: 6ms, render: 10ms)
+ GET /api/auth/session 200 in 8ms (compile: 2ms, render: 5ms)
+✓ Compiled in 1ms
+✓ Compiled in 73ms
+ GET / 200 in 206ms (compile: 57ms, render: 149ms)
+ GET /api/auth/session 200 in 10ms (compile: 5ms, render: 5ms)
+✓ Compiled in 0ms
+ GET / 200 in 336ms (compile: 117ms, render: 219ms)
+ GET / 200 in 358ms (compile: 83ms, render: 275ms)
+ GET / 200 in 21ms (compile: 6ms, render: 15ms)
+ GET /dashboard 200 in 437ms (compile: 188ms, render: 250ms)
+ GET /dashboard 200 in 82ms (compile: 1411µs, render: 81ms)
+ GET /dashboard 200 in 85ms (compile: 3ms, render: 82ms)
+ GET / 200 in 246ms (compile: 3ms, render: 243ms)
+ GET / 200 in 172ms (compile: 3ms, render: 169ms)
+ GET /api/auth/session 200 in 13ms (compile: 3ms, render: 10ms)
+ GET /api/auth/session 200 in 7ms (compile: 904µs, render: 7ms)
+ GET /api/auth/session 200 in 5ms (compile: 901µs, render: 4ms)
+ GET / 200 in 86ms (compile: 22ms, render: 63ms)
+ GET /api/auth/session 200 in 19ms (compile: 3ms, render: 17ms)
+ GET /product/CH0001 200 in 715ms (compile: 693ms, render: 23ms)
+ GET / 200 in 54ms (compile: 4ms, render: 50ms)
+ GET /api/auth/session 200 in 9ms (compile: 3ms, render: 7ms)
+ GET / 200 in 38ms (compile: 7ms, render: 31ms)
+ GET / 200 in 37ms (compile: 6ms, render: 32ms)
+ GET / 200 in 35ms (compile: 4ms, render: 31ms)
+✓ Compiled in 123ms
+ GET /dashboard 200 in 131ms (compile: 3ms, render: 128ms)
+ GET / 200 in 194ms (compile: 4ms, render: 190ms)
+ GET / 200 in 115ms (compile: 19ms, render: 97ms)
+✓ Compiled in 21ms
+ GET /dashboard 200 in 172ms (compile: 8ms, render: 164ms)
+ GET / 200 in 173ms (compile: 122ms, render: 52ms)
+ GET / 200 in 122ms (compile: 105ms, render: 18ms)
+✓ Compiled in 45ms
+✓ Compiled in 21ms
+ GET /product/CH0032 200 in 122ms (compile: 95ms, render: 27ms)
+ GET / 200 in 31ms (compile: 7ms, render: 25ms)
+ GET /dashboard 200 in 206ms (compile: 119ms, render: 86ms)
+ GET /dashboard 200 in 56ms (compile: 19ms, render: 37ms)
+ GET / 200 in 214ms (compile: 84ms, render: 129ms)
+ GET / 200 in 82ms (compile: 5ms, render: 77ms)
+ GET / 200 in 63ms (compile: 4ms, render: 58ms)
+ GET / 200 in 31ms (compile: 3ms, render: 28ms)
+ GET /product/CH0032 200 in 79ms (compile: 54ms, render: 26ms)
+ GET / 200 in 99ms (compile: 5ms, render: 94ms)
+ GET /api/auth/session 200 in 9ms (compile: 3ms, render: 6ms)
+✓ Compiled in 67ms
+ GET /dashboard 200 in 116ms (compile: 6ms, render: 110ms)
+ GET / 200 in 117ms (compile: 69ms, render: 48ms)
+ GET / 200 in 18ms (compile: 1546µs, render: 17ms)
+✓ Compiled in 25ms
+ GET /dashboard 200 in 34ms (compile: 20ms, render: 15ms)
+ GET / 200 in 112ms (compile: 51ms, render: 61ms)
+ GET / 200 in 36ms (compile: 1019µs, render: 35ms)
+ GET / 200 in 164ms (compile: 7ms, render: 157ms)
+ GET /api/auth/session 200 in 9ms (compile: 3ms, render: 6ms)
