@@ -1,28 +1,8 @@
 import { NextResponse } from 'next/server';
 
-// Simple in-memory rate limiter (Warning: Resets across serverless function cold starts)
-// To make this fully persistent, use Upstash Redis or a database table.
-const rateLimitMap = new Map();
-
 export async function POST(req) {
     try {
         const ip = req.headers.get('x-forwarded-for') || req.ip || '127.0.0.1';
-        
-        // 1. IP Rate Limiter (Max 5 requests per hour)
-        const ONE_HOUR = 60 * 60 * 1000;
-        const limitStore = rateLimitMap.get(ip) || { count: 0, resetTime: Date.now() + ONE_HOUR };
-        
-        if (Date.now() > limitStore.resetTime) {
-            limitStore.count = 0;
-            limitStore.resetTime = Date.now() + ONE_HOUR;
-        }
-
-        if (limitStore.count >= 5) {
-            return NextResponse.json(
-                { success: false, error: "Too many quote requests. Please try again in an hour." },
-                { status: 429 }
-            );
-        }
 
         const body = await req.json();
         
@@ -30,9 +10,6 @@ export async function POST(req) {
         // If the invisible 'bot_trap' field is filled by an automated scraper, silently succeed.
         if (body.bot_trap) {
             console.log(`[SECURITY] Blocked automated bot submission from IP: ${ip}`);
-            // Increment limit penalty for malicious bot
-            limitStore.count += 1;
-            rateLimitMap.set(ip, limitStore);
             // Return 200 OK to trick the bot into thinking it succeeded.
             return NextResponse.json({ success: true, message: 'Message recorded.' });
         }
@@ -84,9 +61,6 @@ export async function POST(req) {
         }
 
         // Successfully sent
-        limitStore.count += 1;
-        rateLimitMap.set(ip, limitStore);
-
         return NextResponse.json({ success: true });
 
     } catch (error) {
