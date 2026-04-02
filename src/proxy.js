@@ -12,7 +12,7 @@ const allowedOrigins = [
     'http://localhost:3001'
 ];
 
-export async function middleware(req) {
+export async function proxy(req) {
     const origin = req.headers.get('origin');
     
     // ----------------------------------------------------------------------
