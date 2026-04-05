@@ -1,10 +1,14 @@
-import { getCatalog } from '../../../lib/catalogData';
+import clientPromise from '../../../lib/mongodb';
 import CategoriesClient from '../../../components/dashboard/CategoriesClient';
 
 export const dynamic = 'force-dynamic';
 
 export default async function CategoriesPage() {
-    const catalogData = await getCatalog();
+    const client = await clientPromise;
+    const db = client.db('velcaryn');
+    
+    const categories = await db.collection('categories').find({}).toArray();
+    const serializedCategories = JSON.parse(JSON.stringify(categories));
 
     return (
         <div>
@@ -12,7 +16,7 @@ export default async function CategoriesPage() {
                 <h1>Categories Management</h1>
                 <p>Modify the top-level categorization schema used in the sidebar logic of the storefront.</p>
             </div>
-            <CategoriesClient initialCategories={catalogData.categories} />
+            <CategoriesClient initialCategories={serializedCategories} />
         </div>
     );
 }

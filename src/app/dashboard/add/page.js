@@ -1,4 +1,4 @@
-import { getCatalog, getArchive } from '../../../lib/catalogData';
+import clientPromise from '../../../lib/mongodb';
 import AddProductForm from '../../../components/dashboard/AddProductForm';
 
 export const dynamic = 'force-dynamic';
@@ -7,17 +7,20 @@ export default async function AddProductPage(props) {
     const searchParams = await props.searchParams;
     const { productId, draftId, archiveId } = searchParams || {};
 
-    const catalogData = await getCatalog();
+    const client = await clientPromise;
+    const db = client.db('velcaryn');
+    
+    const [categoriesResult, productsResult] = await Promise.all([
+        db.collection('categories').find({}).toArray(),
+        productId || archiveId ? db.collection('products').findOne({ id: productId || archiveId }) : Promise.resolve(null)
+    ]);
 
-    let initialData = null;
-    if (productId) {
-        initialData = catalogData.products.find(p => p.id === productId) || null;
-    } else if (archiveId) {
-        const archiveData = await getArchive();
-        const archivedProduct = archiveData.archived_products.find(p => p.id === archiveId);
-        if (archivedProduct) {
-            initialData = { ...archivedProduct, isArchived: true };
-        }
+    const categories = JSON.parse(JSON.stringify(categoriesResult));
+    let initialData = productsResult ? JSON.parse(JSON.stringify(productsResult)) : null;
+
+    // Handle archive flag if needed
+    if (archiveId && initialData) {
+        initialData.isArchived = true;
     }
 
     return (
@@ -29,7 +32,7 @@ export default async function AddProductPage(props) {
                     : 'Draft a brand new catalog item and publish it to the live website.'
                 }</p>
             </div>
-            <AddProductForm categories={catalogData.categories} initialData={initialData} draftId={draftId} />
+            <AddProductForm categories={categories} initialData={initialData} draftId={draftId} />
         </div>
     );
 }

@@ -1,16 +1,22 @@
 import { NextResponse } from 'next/server';
-import catalogData from '../../../../../public/data/catalog.json';
+import clientPromise from '../../../../lib/mongodb';
 
 export async function GET(req) {
     try {
         const baseUrl = 'https://www.velcaryn.com';
         const apiKey = 'e02d84793f184e62a8d38865f17d33d9';
         
-        // Collate all important discovery endpoints
+        const client = await clientPromise;
+        const db = client.db('velcaryn');
+        
+        // Fetch all published products to ping for discovery
+        const products = await db.collection('products').find({ published: { $ne: false } }).toArray();
+        
+        // Collate all important discovery endpoints with new SEO-friendly URL structure
         const urlList = [
             baseUrl,
             `${baseUrl}/quote`,
-            ...catalogData.products.map(p => `${baseUrl}/product/${p.id}`)
+            ...products.map(p => `${baseUrl}/product/${p.categorySlug}/${p.slug}`)
         ];
 
         const payload = {
