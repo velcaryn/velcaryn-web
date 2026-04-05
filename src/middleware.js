@@ -8,11 +8,13 @@ const rateLimitMap = new Map();
 // Define allowed origins for strict CORS policies
 const allowedOrigins = [
     'https://www.velcaryn.com',
+    'https://velcaryn.com',
+    'https://velcaryn.netlify.app',
     'http://localhost:3000',
     'http://localhost:3001'
 ];
 
-export async function proxy(req) {
+export async function middleware(req) {
     const origin = req.headers.get('origin');
     
     // ----------------------------------------------------------------------
