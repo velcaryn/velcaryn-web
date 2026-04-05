@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 
 // Define the exact connection string
-const uri = "mongodb+srv://admin_db_user:R5NBH7ZWY76ZjlPv@cluster0.tfvhirv.mongodb.net/velcaryn?retryWrites=true&w=majority&appName=Cluster0";
+const uri = process.env.MONGODB_URI;
 
 async function seedDatabase() {
     let client;

@@ -1703,6 +1703,24 @@ footer {
     }
 }
 
+/* Technical Matrix: Scroll Hint */
+.accordion-matrix-block div::after {
+    content: 'Scroll →';
+    display: block;
+    text-align: right;
+    font-size: 0.65rem;
+    color: #94a3b8;
+    padding-top: 8px;
+    font-style: italic;
+}
+
+/* Breadcrumb Wrap Resilience */
+.pdp-breadcrumb {
+    display: flex;
+    flex-wrap: wrap;
+    line-height: 1.6;
+}
+
 /* Accordion animation (moved from component-level style jsx) */
 @keyframes fadeInRow {
     from { opacity: 0; transform: translateY(-4px); }

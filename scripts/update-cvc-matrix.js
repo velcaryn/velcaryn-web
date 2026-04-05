@@ -1,6 +1,6 @@
 import { MongoClient } from 'mongodb';
 
-const uri = process.env.MONGODB_URI || "mongodb+srv://admin_db_user:R5NBH7ZWY76ZjlPv@cluster0.tfvhirv.mongodb.net/velcaryn?retryWrites=true&w=majority&appName=Cluster0";
+const uri = process.env.MONGODB_URI;
 
 const descriptionText = `**Description**
 Central Venous Catheter made of specially formulated and biocompatible Polyurethane material provides strength during insertion and also softens at body temperature to conform to the body tissues and reduces the risk and vascular trauma.
