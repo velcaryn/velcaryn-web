@@ -16,17 +16,16 @@ export default function Catalog() {
 
     const { cart, addToCart, removeFromCart } = useCart();
 
-    // Uses NEXT_PUBLIC_CATALOG_URL in production (set in .env.local / Netlify env vars)
-    // to fetch from GitHub raw content directly, bypassing the stale CDN-cached static file.
-    // Falls back to the local file in development.
-    const CATALOG_URL = process.env.NEXT_PUBLIC_CATALOG_URL || '/data/catalog.json';
+    const CATALOG_URL = '/api/products';
 
     useEffect(() => {
         fetch(CATALOG_URL, { cache: 'no-store' })
             .then(res => res.json())
             .then(data => {
-                setAllProducts(data.products);
-                setCategories(data.categories);
+                if (data.success) {
+                    setAllProducts(data.products);
+                    setCategories(data.categories);
+                }
                 setLoading(false);
             })
             .catch(err => {
@@ -50,32 +49,25 @@ export default function Catalog() {
                 <div className="section-header text-center">
                     <h2>Product Catalog</h2>
                     <div className="divider"></div>
-                    <p>Browse our extensive range of import and export commodities.</p>
+                    <p>Browse our extensive range of commodities.</p>
                 </div>
 
-                <div className="catalog-controls">
-                    <div className="search-box">
-                        <input
-                            type="text"
-                            id="catalog-search"
-                            placeholder="Search products..."
-                            value={searchTerm}
-                            onChange={e => setSearchTerm(e.target.value)}
-                            suppressHydrationWarning
-                        />
-                    </div>
-                    <div className="filter-box">
-                        <select
-                            id="catalog-category"
-                            value={selectedCategory}
-                            onChange={e => setSelectedCategory(e.target.value)}
-                            suppressHydrationWarning
+                <div className="catalog-tabs">
+                    <button
+                        className={`catalog-tab-btn ${selectedCategory === 'all' ? 'active' : ''}`}
+                        onClick={() => setSelectedCategory('all')}
+                    >
+                        All
+                    </button>
+                    {categories.map(cat => (
+                        <button
+                            key={cat.id}
+                            className={`catalog-tab-btn ${selectedCategory === cat.id ? 'active' : ''}`}
+                            onClick={() => setSelectedCategory(cat.id)}
                         >
-                            {categories.map(cat => (
-                                <option key={cat.id} value={cat.id}>{cat.name}</option>
-                            ))}
-                        </select>
-                    </div>
+                            {cat.name.replace(' Access', '')}
+                        </button>
+                    ))}
                 </div>
 
                 <div id="catalog-grid" className="catalog-grid">
@@ -92,7 +84,7 @@ export default function Catalog() {
                             let buttonAction;
 
                             if (isCartEmpty) {
-                                buttonText = "Request for a Quote";
+                                buttonText = "Request for Quote";
                                 buttonAction = () => addToCart(product);
                             } else if (inCart) {
                                 buttonText = navigatingId === product.id ? "Loading..." : "Request Quote";
@@ -103,7 +95,7 @@ export default function Catalog() {
                                     }, 1000);
                                 };
                             } else {
-                                buttonText = "Add";
+                                buttonText = "Request Quote";
                                 buttonAction = () => addToCart(product);
                             }
 
@@ -119,10 +111,10 @@ export default function Catalog() {
                                         </button>
                                     )}
                                     {product.image ? (
-                                        <Link href={`/product/${product.id}`} style={{ display: 'block', overflow: 'hidden' }}>
+                                        <Link href={`/product/${product.categorySlug}/${product.slug}`} style={{ display: 'block', overflow: 'hidden' }}>
                                             <div className="product-img" style={{ position: 'relative' }}>
                                                 <Image 
-                                                    src={`/${product.image}`} 
+                                                    src={product.image.startsWith('/') || product.image.startsWith('http') || product.image.startsWith('data:') ? product.image : `/${product.image}`} 
                                                     alt={product.name} 
                                                     fill
                                                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -131,7 +123,7 @@ export default function Catalog() {
                                             </div>
                                         </Link>
                                     ) : (
-                                        <Link href={`/product/${product.id}`} style={{ display: 'block', overflow: 'hidden' }}>
+                                        <Link href={`/product/${product.categorySlug}/${product.slug}`} style={{ display: 'block', overflow: 'hidden' }}>
                                             <div className="product-img product-img-placeholder">
                                                 <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                                                     <rect x="3" y="3" width="18" height="18" rx="2" ry="2" />
@@ -143,11 +135,13 @@ export default function Catalog() {
                                         </Link>
                                     )}
                                     <div className="product-content">
-                                        <span className="product-category">{catName}</span>
-                                        <Link href={`/product/${product.id}`} style={{ textDecoration: 'none', color: 'inherit', display: 'inline-block' }}>
+                                        <Link href={`/product/${product.categorySlug}/${product.slug}`} style={{ textDecoration: 'none', color: 'inherit', display: 'inline-block' }}>
                                             <h3 className="catalog-pdp-title-link">{product.name}</h3>
                                         </Link>
-                                        <p className="product-desc">{product.description}</p>
+                                        <span className="product-category">
+                                            {catName}
+                                        </span>
+                                        <p className="product-desc">{product.short_description || product.description}</p>
                                         <div style={{ marginTop: 'auto', paddingTop: '15px' }}>
                                             {product.isQuoteOnly ? (
                                                 <button

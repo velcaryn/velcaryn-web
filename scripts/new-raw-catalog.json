@@ -1,0 +1,184 @@
+[
+  {
+    "product_name": "Central Venous Catheter Kit",
+    "model_number": "CD-1001",
+    "type": "Catheter Kit",
+    "category": "Vascular and Dialysis Access",
+    "source_url": "https://www.mediplusindia.com/products/central-venous-catheter-kit-cd-1001/",
+    "image_url": "",
+    "description": "The Central Venous Catheter Kit features a specially formulated biocompatible Polyurethane catheter that provides strength during insertion and softens at body temperature to conform to body tissues, reducing the risk of vascular trauma. Designed for central venous access, the kit includes a soft beveled tip for smooth insertion, a flexible J-tip guidewire to prevent vessel perforation, and radio-opaque catheter material with clear markings for accurate placement. Available in Single, Double, Triple, and Four Lumen configurations. Sterile, Disposable, Individually Tray Packed.",
+    "kit_components": [
+      "Indwelling catheter",
+      "Y-Introducer needle with check valve",
+      "J-Tip guide wire",
+      "Vessel dilator",
+      "Luer lock syringe",
+      "Scalpel",
+      "Catheter holder",
+      "Catheter holder clamp",
+      "Injection cap",
+      "Extension line clamp",
+      "Guiding / LOR Syringe (Optional)"
+    ],
+    "technical_specs": {
+      "material": "Polyurethane (biocompatible)",
+      "tip": "Soft, beveled",
+      "guidewire": "Nickel Titanium, Double Distal, flexible J-tip",
+      "sterilization": "Sterile / Disposable"
+    }
+  },
+  {
+    "product_name": "Hemodialysis Catheter Kit",
+    "model_number": "CD-1002",
+    "type": "Catheter Kit",
+    "category": "Vascular and Dialysis Access",
+    "source_url": "https://www.mediplusindia.com/products/hemodialysis-catheter-kit/",
+    "image_url": "",
+    "description": "The Hemodialysis Catheter Kit provides temporary vascular access for hemodialysis until a permanent access is available or until another dialysis therapy is substituted. Made from Polyurethane with a soft, geometrically designed conical tip for easy insertion and prevention of catheter-related trauma. Available in single, double, and triple lumen configurations with clear silicone lumen extensions for enhanced visibility and safety. The double lumen design contains two large bore lumens that connect to the dialysis machine to form a complete circuit for blood removal and return. Available in Straight and Curved Extension types. Sterile, Disposable, Individually Tray Packed.",
+    "technical_specs": {
+      "material": "Polyurethane",
+      "tip": "Soft, geometrically designed conical tip",
+      "lumen_extensions": "Clear silicone",
+      "sterilization": "Sterile / Disposable"
+    }
+  },
+  {
+    "product_name": "Permacatheter",
+    "model_number": null,
+    "type": "Permanent Tunneled Catheter",
+    "category": "Vascular and Dialysis Access",
+    "source_url": null,
+    "image_url": "",
+    "description": "Permacatheter (permanent tunneled dialysis catheter) for long-term hemodialysis access. No product page URL was provided for this item; data to be populated once source URL is confirmed.",
+    "technical_specs": {}
+  },
+  {
+    "product_name": "Swan Neck Catheter – Peritoneal Dialysis Kit",
+    "model_number": "CD-1005",
+    "type": "Peritoneal Dialysis Set",
+    "category": "Vascular and Dialysis Access",
+    "source_url": "https://www.mediplusindia.com/products/peritoneal-dialysis-set/",
+    "image_url": "",
+    "description": "A specially designed Y-shaped peritoneal dialysis transfusion set for administering dialysis solution. Features super smooth kink-resistant tubing for uniform flow rate, a clear transparent flexible chamber with a sharp piercing spike, two upper control clamps to facilitate solution bottle changes, and top and lower control clamps for easy input and drainage of solutions. Sterile, Disposable, Individually Packed.",
+    "technical_specs": {
+      "set_shape": "Y-shaped",
+      "tubing": "Super smooth, kink-resistant",
+      "chamber": "Clear transparent, flexible, with built-in sharp spike",
+      "sterilization": "Sterile / Disposable"
+    }
+  },
+  {
+    "product_name": "AV Fistula Needle",
+    "model_number": null,
+    "type": "Fistula Needle",
+    "category": "Vascular and Dialysis Access",
+    "source_url": "https://www.mediplusindia.com/products/a-v-fistula-needle/",
+    "image_url": "",
+    "description": "AV Fistula Needle used for accessing arteriovenous fistulas during hemodialysis. The product page was temporarily unavailable during catalog extraction; data to be populated once the page is accessible.",
+    "technical_specs": {}
+  },
+  {
+    "product_name": "Nelaton Catheter",
+    "model_number": "U-2016",
+    "type": "Nelaton / Intermittent Catheter",
+    "category": "Urology",
+    "source_url": "https://www.mediplusindia.com/products/nelaton-catheter/",
+    "image_url": "",
+    "description": "Nelaton Catheters are designed for short-term bladder catheterization. The catheter features super smooth kink-resistant tubing for uniform flow rate, an atraumatic soft rounded closed tip with two lateral eyes for efficient drainage, and a frosted surface for smooth intubation. The proximal end has a universal funnel-shaped connector for extension, and color-coded connectors allow easy size identification per standards. An X-ray opaque line runs throughout the catheter length. Available in Male and Female versions, and with DEHP-free material. Length: 40 cm. Sterile, Disposable, Individually Packed.",
+    "technical_specs": {
+      "length": "40 cm",
+      "tip": "Soft, rounded, closed with two lateral eyes",
+      "connector": "Universal funnel-shaped, color-coded",
+      "x_ray_opaque": true,
+      "sterilization": "Sterile / Disposable"
+    }
+  },
+  {
+    "product_name": "Urine Collection Bag",
+    "model_number": "U-2001 to U-2012",
+    "type": "Urine Drainage Bag",
+    "category": "Urology",
+    "source_url": "https://www.mediplusindia.com/products/urine-collection-bag/",
+    "image_url": "",
+    "description": "A urine drainage system suitable for both short and long-term use. Features super smooth kink-resistant tubing with a universal tapered connector, an efficient non-return valve to prevent backflow, and a transparent graduated bag for visual inspection and volume monitoring. Specialty-designed hooks or hangers allow easy carrying and upright positioning. Available in multiple sizes, tube lengths, outlet types, and with or without a sampling port.",
+    "technical_specs": {
+      "non_return_valve": true,
+      "bag_material": "Transparent",
+      "graduation": "Marked in ml",
+      "sterilization": "Sterile or Non-Sterile (as ordered)"
+    }
+  },
+  {
+    "product_name": "TUR Set",
+    "model_number": "U-2017",
+    "type": "Irrigation Set",
+    "category": "Urology",
+    "source_url": "https://www.mediplusindia.com/products/tur-set/",
+    "image_url": "",
+    "description": "The TUR (Trans Urethral Resection) Set is a Y-shaped irrigation set designed for endoscopic irrigation during transurethral resection of the prostate gland. Features super smooth kink-resistant tubing for uniform flow rate, thumb-operated clamps for quick and smooth bottle changeover, and a flexible latex proximal end for easy connection to the endoscope. Sterile, Disposable, Individually Packed.",
+    "technical_specs": {
+      "set_shape": "Y-shaped",
+      "tubing": "Super smooth, kink-resistant",
+      "clamps": "Thumb-operated",
+      "proximal_connection": "Flexible latex tubing for endoscope connection",
+      "indication": "Endoscopic irrigation during TURP",
+      "sterilization": "Sterile / Disposable"
+    }
+  },
+  {
+    "product_name": "Foley Balloon Catheter (Latex)",
+    "model_number": "U-2018",
+    "type": "Foley Catheter – Latex",
+    "category": "Urology",
+    "source_url": "https://www.mediplusindia.com/products/foley-balloon-catheter-latex/",
+    "image_url": "",
+    "description": "A latex-based Foley Balloon Catheter for short and long-term urine drainage. Made from natural latex rubber with a silicone elastomer coating for a smooth, atraumatic catheterization experience. A high-strength polymer middle layer ensures a wider inner diameter and high flow rate, while minimizing encrustation and catheter blockage. Features a smooth eye, an ultra-thin highly elastic balloon, and a hard non-return valve for trouble-free inflation and deflation. Available in 2-Way and 3-Way configurations. Sterile, Disposable, Individually Packed.",
+    "technical_specs": {
+      "material": "Natural latex rubber, silicone elastomer coated",
+      "valve": "Hard non-return valve",
+      "sterilization": "Sterile / Disposable"
+    }
+  },
+  {
+    "product_name": "Silicone Foley Balloon Catheter",
+    "model_number": "U-2019",
+    "type": "Foley Catheter – Silicone",
+    "category": "Urology",
+    "source_url": "https://www.mediplusindia.com/products/foley-balloon-catheter/",
+    "image_url": "",
+    "description": "A 100% medical grade silicone Foley Balloon Catheter designed for long-term urine drainage. The transparent silicone tube allows easy visual inspection and fluid monitoring. Non-toxic, biocompatible, and extra smooth for maximum patient comfort. Features a symmetrical balloon, rounded sealed tip, hard non-return valve, and an X-ray opaque line for placement confirmation. Available in 2-Way and 3-Way configurations. Sterile, Disposable, Individually Packed.",
+    "technical_specs": {
+      "material": "100% Medical grade silicone",
+      "transparency": "Transparent for visual inspection",
+      "x_ray_opaque": true,
+      "valve": "Hard non-return valve",
+      "sterilization": "Sterile / Disposable"
+    }
+  },
+  {
+    "product_name": "Double J Stent",
+    "model_number": null,
+    "type": "Ureteral Stent",
+    "category": "Urology",
+    "source_url": "https://www.mediplusindia.com/products/double-j-stent/",
+    "image_url": "",
+    "description": "Double J (DJ) Stent available in open and closed end configurations for ureteral stenting. The product page was temporarily unavailable during catalog extraction; data to be populated once the page is accessible.",
+    "technical_specs": {}
+  },
+  {
+    "product_name": "Abdominal Drain Kit",
+    "model_number": "S-4008",
+    "type": "Abdominal Drainage Kit",
+    "category": "Surgery",
+    "source_url": "https://www.mediplusindia.com/products/abdominal-drain-kit/",
+    "image_url": "",
+    "description": "The Abdominal Drain Kit (Medi-ADK) is specially designed for post-operative abdominal drainage. It includes a soft abdominal drainage catheter with an atraumatic open distal end and six lateral eyes for non-traumatic insertion, connected to a 2000 ml collection bag. The X-ray opaque line runs throughout the catheter length for imaging verification. Features super smooth kink-resistant tubing for uniform flow, a specially designed handle for upright positioning and carrying ease, and transparent sheeting for visual inspection. Available with DEHP-free material. Sterile, Disposable, Individually Packed.",
+    "technical_specs": {
+      "collection_bag_capacity_ml": 2000,
+      "catheter_tip": "Open distal end with six lateral eyes",
+      "x_ray_opaque": true,
+      "transparency": "Transparent bag for visual inspection",
+      "sterilization": "Sterile / Disposable"
+    }
+  }
+]

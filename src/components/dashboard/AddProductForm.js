@@ -102,25 +102,11 @@ export default function AddProductForm({ categories: defaultCategories, initialD
         
         localStorage.setItem('velcaryn_drafts', JSON.stringify(existingDrafts));
 
-        // If editing a live product directly, seamlessly remove it from the global catalog
+        // If editing a live product directly, we would remove the old ID via DB here.
+        // For now, since drafts are conceptually handled, we skip the live DB removal 
+        // to prevent accidental deletion of a published MongoDB document when just saving a draft.
         if (initialData && !initialData.isArchived && !draftId) {
-            try {
-                const res = await fetch('/api/github/publish', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        action: 'REMOVE_FROM_LIVE',
-                        payload: { productId: initialData.id },
-                        commitMessage: `Dashboard: Converted Live Product ${name} to Draft`
-                    })
-                });
-                
-                if (!res.ok) {
-                    console.warn("Could not remove from live, or it was already removed.");
-                }
-            } catch (e) {
-                console.error("Failed to sync live removal", e);
-            }
+            // Future: Implement DELETE /api/admin/products?id=initialData.id
         }
 
         toast.success("Saved to local drafts!");
@@ -141,38 +127,29 @@ export default function AddProductForm({ categories: defaultCategories, initialD
             return;
         }
 
-        // If existingImage exists and NO croppedImage, we reuse the exact path (e.g. 'images/products/foo.png').
-        // If croppedImage exists, we map it to our standardized directory tree.
-        const resolvedImagePath = croppedImage ? `images/products/${productId}.png` : existingImage;
-
         // Collapse the key-value specList array down to an object
         const finalSpecs = specList.reduce((acc, curr) => {
             if (curr.key.trim() && curr.value.trim()) acc[curr.key.trim()] = curr.value.trim();
             return acc;
         }, {});
 
-        const payload = {
-            product: {
-                id: productId,
-                name,
-                category,
-                description,
-                image: resolvedImagePath,
-                isQuoteOnly,
-                specifications: Object.keys(finalSpecs).length > 0 ? finalSpecs : undefined
-            },
-            imageContentBase64: croppedImage // Null if they didn't upload a *new* image
+        // By assigning croppedImage directly, MongoDB stores the Base64 string dynamically. 
+        // We no longer require S3 buckets or local GitHub static proxy hacks!
+        const productPayload = {
+            id: productId,
+            name,
+            category,
+            description,
+            image: croppedImage || existingImage || "/assets/placeholder.png",
+            isQuoteOnly,
+            specifications: Object.keys(finalSpecs).length > 0 ? finalSpecs : undefined
         };
 
         try {
-            const res = await fetch('/api/github/publish', {
+            const res = await fetch('/api/admin/products', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    action: 'UPDATE_PRODUCT',
-                    payload,
-                    commitMessage: `Dashboard: ${isNewProduct ? 'Create' : 'Modify'} Product ${name}`
-                })
+                body: JSON.stringify(productPayload)
             });
 
             if (res.ok) {

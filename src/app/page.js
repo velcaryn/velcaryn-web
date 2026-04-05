@@ -15,6 +15,8 @@ export default function Home() {
            muted 
            playsInline 
            className="hero-video-bg"
+           poster="/assets/VELCARYN-SVG.svg"
+           preload="none"
         >
           <source src="/assets/hero_video.mp4" type="video/mp4" />
         </video>
@@ -22,8 +24,8 @@ export default function Home() {
         
         <div className="container hero-container">
           <div className="hero-content">
-            <h1>Connecting Markets.<br /><span>Moving the World.</span></h1>
-            <p>Velcaryn is your trusted partner for seamless global trade, specializing in the efficient export and import of high-quality goods across international borders.</p>
+            <h1>Connect. Trade. Grow.<br /><span>The expert way</span></h1>
+            <p>Velcaryn is your trusted partner for compliant trade across borders. Expert selection of products at its highest quality to meet buyer expectations everytime.</p>
             <div className="hero-buttons">
               <a href="#catalog" className="btn btn-primary btn-lg">Explore Catalog</a>
               <a href="#about" className="btn btn-secondary btn-lg">Learn More</a>
@@ -44,13 +46,14 @@ export default function Home() {
           <div className="about-grid">
             <div className="about-text">
               <h3>Excellence in Global Trade</h3>
-              <p>At Velcaryn, we bridge the gap between global demand and superior supply. With years of expertise in international logistics and trade compliance, we ensure that your goods reach their destination safely, securely, and on time.</p>
+              <p>At Velcaryn, we bridge the gap between global demand and superior supply. With years of expertise in international business and medical field, we ensure that your goods reach their destination safely, securely, and on time.</p>
               <p>Our commitment to reliability and transparency has made us a preferred partner for businesses looking to expand their footprint in the global marketplace.</p>
             </div>
             <div className="about-visual">
-              <div className="visual-box">
-                <span className="stat-number">50+</span>
-                <span className="stat-label">Countries Served</span>
+              <div className="visual-box compliance-box">
+                <span className="stat-label">Compliance</span>
+                <span className="stat-label">Quality</span>
+                <span className="stat-label">Reliability</span>
               </div>
             </div>
           </div>
@@ -65,19 +68,19 @@ export default function Home() {
             <p>Comprehensive solutions for your international business needs.</p>
           </div>
           <div className="services-grid">
-            <div className="service-card">
+            <div className="service-card text-center">
+              <div className="service-icon">⚕️</div>
+              <h3>Expert Sourcing</h3>
+              <p>Strategic sourcing of high-quality goods with first hand experience to international markets, maximizing your global reach and profitability.</p>
+            </div>
+            <div className="service-card text-center">
+              <div className="service-icon">💼</div>
+              <h3>Product Consulting</h3>
+              <p>Provide end to end consulting on the product catalog for the buyer to understand the item quality and function better and make informed order decisions</p>
+            </div>
+            <div className="service-card text-center">
               <div className="service-icon">📤</div>
               <h3>Global Export</h3>
-              <p>Strategic sourcing and distribution of high-quality goods to international markets, maximizing your global reach and profitability.</p>
-            </div>
-            <div className="service-card">
-              <div className="service-icon">📥</div>
-              <h3>Strategic Import</h3>
-              <p>Efficient procurement of essential materials and products from trusted global suppliers, ensuring quality and competitive pricing.</p>
-            </div>
-            <div className="service-card">
-              <div className="service-icon">🚢</div>
-              <h3>Logistics & Customs</h3>
               <p>End-to-end management of shipping, freight forwarding, and complex customs clearance processes to guarantee smooth transit.</p>
             </div>
           </div>
