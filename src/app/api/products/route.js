@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import clientPromise from '../../../lib/mongodb';
+import clientPromise from '@/lib/mongodb';
 
 // Config parameter: bypass cached static builds to force real-time reads globally
 export const dynamic = 'force-dynamic';
@@ -27,7 +27,7 @@ export async function GET() {
     } catch (error) {
         console.error("Global Catalog API extraction fault:", error);
         return NextResponse.json(
-            { success: false, error: "Database mapping resolution failure." },
+            { success: false, error: error.message || error.toString() },
             { status: 500 }
         );
     }

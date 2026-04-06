@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import Header from '../../../../components/Header';
 import Footer from '../../../../components/Footer';
 import ProductActionClient from './ProductActionClient';
 import MatrixAccordion from './MatrixAccordion';
+import ProductDetailSkeleton from '../../../../components/ui/ProductDetailSkeleton';
 
 // Direct Server Component MongoDB bindings
 import clientPromise from '../../../../lib/mongodb';
@@ -97,7 +98,8 @@ export default async function ProductDetailPage({ params }) {
             <Header />
             <div className="pdp-wrapper">
                 <div className="container">
-                    
+                    <Suspense fallback={<ProductDetailSkeleton />}>
+
                     <div className="pdp-breadcrumb">
                         <a href="/#catalog" className="back-link" style={{ textDecoration: 'none' }}>
                             Home Catalog
@@ -265,6 +267,7 @@ export default async function ProductDetailPage({ params }) {
                         </div>
                     )}
 
+                    </Suspense>
                 </div>
             </div>
             <Footer />

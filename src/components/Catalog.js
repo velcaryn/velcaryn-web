@@ -4,6 +4,17 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useCart } from '../context/CartContext';
+import { LumaSpin } from './ui/luma-spin';
+
+// Only these 3 category IDs are shown in the catalog tabs
+const ALLOWED_CATEGORIES = ['urology', 'vascularanddialysis', 'surgery'];
+
+// Human-readable labels for each tab
+const CATEGORY_LABELS = {
+    urology: 'Urology',
+    vascularanddialysis: 'Vascular and Dialysis',
+    surgery: 'Surgery',
+};
 
 export default function Catalog() {
     const [allProducts, setAllProducts] = useState([]);
@@ -16,15 +27,21 @@ export default function Catalog() {
 
     const { cart, addToCart, removeFromCart } = useCart();
 
-    const CATALOG_URL = '/api/products';
-
     useEffect(() => {
-        fetch(CATALOG_URL, { cache: 'no-store' })
+        fetch('/api/products', { cache: 'no-store' })
             .then(res => res.json())
             .then(data => {
                 if (data.success) {
-                    setAllProducts(data.products);
-                    setCategories(data.categories);
+                    // Keep only the 3 allowed categories
+                    const filteredCats = (data.categories || []).filter(c =>
+                        ALLOWED_CATEGORIES.includes(c.id)
+                    );
+                    // Keep only products belonging to those categories
+                    const filteredProducts = (data.products || []).filter(p =>
+                        ALLOWED_CATEGORIES.includes(p.category)
+                    );
+                    setCategories(filteredCats);
+                    setAllProducts(filteredProducts);
                 }
                 setLoading(false);
             })
@@ -35,9 +52,11 @@ export default function Catalog() {
     }, []);
 
     const filtered = allProducts.filter(product => {
-        const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        const matchesSearch =
+            product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
             product.description.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesCategory = selectedCategory === 'all' || product.category === selectedCategory;
+        const matchesCategory =
+            selectedCategory === 'all' || product.category === selectedCategory;
         return matchesSearch && matchesCategory;
     });
 
@@ -52,6 +71,7 @@ export default function Catalog() {
                     <p>Browse our extensive range of commodities.</p>
                 </div>
 
+                {/* Category Tabs — exactly 4 buttons: All + 3 categories */}
                 <div className="catalog-tabs">
                     <button
                         className={`catalog-tab-btn ${selectedCategory === 'all' ? 'active' : ''}`}
@@ -59,63 +79,103 @@ export default function Catalog() {
                     >
                         All
                     </button>
-                    {categories.map(cat => (
+                    {ALLOWED_CATEGORIES.map(catId => (
                         <button
-                            key={cat.id}
-                            className={`catalog-tab-btn ${selectedCategory === cat.id ? 'active' : ''}`}
-                            onClick={() => setSelectedCategory(cat.id)}
+                            key={catId}
+                            className={`catalog-tab-btn ${selectedCategory === catId ? 'active' : ''}`}
+                            onClick={() => setSelectedCategory(catId)}
                         >
-                            {cat.name.replace(' Access', '')}
+                            {CATEGORY_LABELS[catId]}
                         </button>
                     ))}
                 </div>
 
                 <div id="catalog-grid" className="catalog-grid">
                     {loading ? (
-                        <div className="loading-state">Loading catalog...</div>
+                        /* ── Luma Spin wait screen ── */
+                        <div style={{
+                            gridColumn: '1 / -1',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            padding: '5rem 0',
+                            gap: '1.5rem',
+                        }}>
+                            <LumaSpin size={65} />
+                            <p style={{
+                                color: 'var(--text-secondary, #64748b)',
+                                fontSize: '1rem',
+                                fontWeight: 500,
+                                letterSpacing: '0.02em',
+                            }}>
+                                Loading catalog…
+                            </p>
+                        </div>
                     ) : filtered.length === 0 ? (
                         <div className="no-results">No products found matching your criteria.</div>
                     ) : (
                         filtered.map(product => {
-                            const catName = categories.find(c => c.id === product.category)?.name || product.category;
+                            const catName =
+                                CATEGORY_LABELS[product.category] ||
+                                categories.find(c => c.id === product.category)?.name ||
+                                product.category;
                             const inCart = cart.some(item => item.id === product.id);
 
                             let buttonText;
                             let buttonAction;
 
                             if (isCartEmpty) {
-                                buttonText = "Request for Quote";
+                                buttonText = 'Request for Quote';
                                 buttonAction = () => addToCart(product);
                             } else if (inCart) {
-                                buttonText = navigatingId === product.id ? "Loading..." : "Request Quote";
+                                buttonText = navigatingId === product.id ? 'Loading…' : 'Request Quote';
                                 buttonAction = () => {
                                     setNavigatingId(product.id);
-                                    setTimeout(() => {
-                                        router.push('/quote');
-                                    }, 1000);
+                                    setTimeout(() => router.push('/quote'), 1000);
                                 };
                             } else {
-                                buttonText = "Request Quote";
+                                buttonText = 'Request Quote';
                                 buttonAction = () => addToCart(product);
                             }
 
                             return (
-                                <div key={product.id} className="product-card" style={inCart ? { border: '2px solid var(--primary-color)', position: 'relative', transform: 'translateY(-4px)', boxShadow: '0 12px 20px rgba(0,0,0,0.1)' } : {}}>
+                                <div
+                                    key={product.id}
+                                    className="product-card"
+                                    style={inCart ? {
+                                        border: '2px solid var(--primary-color)',
+                                        position: 'relative',
+                                        transform: 'translateY(-4px)',
+                                        boxShadow: '0 12px 20px rgba(0,0,0,0.1)',
+                                    } : {}}
+                                >
                                     {inCart && (
                                         <button
-                                            onClick={(e) => { e.stopPropagation(); removeFromCart(product.id); }}
-                                            style={{ position: 'absolute', top: '8px', right: '8px', background: '#ef4444', border: 'none', borderRadius: '50%', width: '32px', height: '32px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', cursor: 'pointer', zIndex: 10, boxShadow: '0 4px 6px rgba(239, 68, 68, 0.4)' }}
+                                            onClick={e => { e.stopPropagation(); removeFromCart(product.id); }}
+                                            style={{
+                                                position: 'absolute', top: '8px', right: '8px',
+                                                background: '#ef4444', border: 'none', borderRadius: '50%',
+                                                width: '32px', height: '32px', display: 'flex',
+                                                alignItems: 'center', justifyContent: 'center',
+                                                color: 'white', cursor: 'pointer', zIndex: 10,
+                                                boxShadow: '0 4px 6px rgba(239,68,68,0.4)',
+                                            }}
                                             title="Remove selection"
                                         >
-                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+                                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                                <line x1="18" y1="6" x2="6" y2="18" />
+                                                <line x1="6" y1="6" x2="18" y2="18" />
+                                            </svg>
                                         </button>
                                     )}
+
                                     {product.image ? (
                                         <Link href={`/product/${product.categorySlug}/${product.slug}`} style={{ display: 'block', overflow: 'hidden' }}>
                                             <div className="product-img" style={{ position: 'relative' }}>
-                                                <Image 
-                                                    src={product.image.startsWith('/') || product.image.startsWith('http') || product.image.startsWith('data:') ? product.image : `/${product.image}`} 
-                                                    alt={product.name} 
+                                                <Image
+                                                    src={product.image.startsWith('/') || product.image.startsWith('http') || product.image.startsWith('data:') ? product.image : `/${product.image}`}
+                                                    alt={product.name}
                                                     fill
                                                     sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                                                     style={{ objectFit: 'cover' }}
@@ -134,13 +194,12 @@ export default function Catalog() {
                                             </div>
                                         </Link>
                                     )}
+
                                     <div className="product-content">
                                         <Link href={`/product/${product.categorySlug}/${product.slug}`} style={{ textDecoration: 'none', color: 'inherit', display: 'inline-block' }}>
                                             <h3 className="catalog-pdp-title-link">{product.name}</h3>
                                         </Link>
-                                        <span className="product-category">
-                                            {catName}
-                                        </span>
+                                        <span className="product-category">{catName}</span>
                                         <p className="product-desc">{product.short_description || product.description}</p>
                                         <div style={{ marginTop: 'auto', paddingTop: '15px' }}>
                                             {product.isQuoteOnly ? (
@@ -152,7 +211,9 @@ export default function Catalog() {
                                                     {buttonText}
                                                 </button>
                                             ) : (
-                                                <button className="btn btn-primary" style={{ width: '100%', fontSize: '0.85rem', visibility: 'hidden', pointerEvents: 'none' }}>EmptySpace</button>
+                                                <button className="btn btn-primary" style={{ width: '100%', fontSize: '0.85rem', visibility: 'hidden', pointerEvents: 'none' }}>
+                                                    EmptySpace
+                                                </button>
                                             )}
                                         </div>
                                     </div>
