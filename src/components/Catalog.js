@@ -36,9 +36,9 @@ export default function Catalog() {
                     const filteredCats = (data.categories || []).filter(c =>
                         ALLOWED_CATEGORIES.includes(c.id)
                     );
-                    // Keep only products belonging to those categories
+                    // Keep only products belonging to those categories (check by slug)
                     const filteredProducts = (data.products || []).filter(p =>
-                        ALLOWED_CATEGORIES.includes(p.category)
+                        ALLOWED_CATEGORIES.includes(p.categorySlug)
                     );
                     setCategories(filteredCats);
                     setAllProducts(filteredProducts);
@@ -56,7 +56,7 @@ export default function Catalog() {
             product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
             product.description.toLowerCase().includes(searchTerm.toLowerCase());
         const matchesCategory =
-            selectedCategory === 'all' || product.category === selectedCategory;
+            selectedCategory === 'all' || product.categorySlug === selectedCategory;
         return matchesSearch && matchesCategory;
     });
 
@@ -117,9 +117,9 @@ export default function Catalog() {
                     ) : (
                         filtered.map(product => {
                             const catName =
-                                CATEGORY_LABELS[product.category] ||
-                                categories.find(c => c.id === product.category)?.name ||
-                                product.category;
+                                CATEGORY_LABELS[product.categorySlug] ||
+                                categories.find(c => c.id === product.categorySlug)?.name ||
+                                product.categorySlug;
                             const inCart = cart.some(item => item.id === product.id);
 
                             let buttonText;
